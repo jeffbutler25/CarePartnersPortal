@@ -1,0 +1,101 @@
+﻿@page "/Admin/Regions"
+@page "/Admin/Regions/{Task}/{ID}"
+@layout MainLayoutAdmin
+@using CarePartnersPortal.Data
+@inject ApplicationDBContext db
+@inject NavigationManager nav
+<h3>Region</h3>
+<EditForm Model="@region">
+    <table class="table">
+        <thread>
+            <tr style="text-align:center">
+                <th>Region</th>
+                <th>Approvers</th>
+                <th>Action</th>
+            </tr>
+            @if (region != null)
+            {
+                foreach (Region region in regions)
+                {
+                    if (Task == "edit" && region.ID == Int32.Parse(ID))
+                    {
+                        <tr>
+                            <td><InputText class="form-control" @bind-Value="region.RegionName" /></td>
+                            <td><InputText class="form-control" @bind-Value="region.Approvers" /></td>
+                            <td><button class="btn btn-primary btn-sm" @onclick="e => UpdateRegion(region)">Update</button> <button class="btn btn-primary btn-sm" @onclick="@(e => DeleteRegion(region))">Delete</button></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@region.RegionName</td>
+                            <td>@region.Approvers</td>
+                            <td><button class="btn btn-primary btn-sm" @onclick="e => EditRegion(region)">Edit</button></td>
+                        </tr>
+                    }
+                }
+            }
+            @if (Task != "edit")
+            {
+                <tr>
+                    <td><InputText class="form-control" @bind-Value="region.RegionName" /></td>
+                    <td><InputText class="form-control" @bind-Value="region.Approvers" /></td>
+                    <td><button class="btn btn-primary btn-sm" @onclick="e => AddRegion(region)">Add</button></td>
+                </tr>
+            }
+        </thread>
+    </table>
+</EditForm>
+
+@code {
+
+    List<Region> regions;
+
+    private Region region = new Region();
+    private GlobalForm form = new GlobalForm();
+
+
+    [Parameter]
+    public string Task { get; set; }
+
+    [Parameter]
+    public string ID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        GetInfoFromDB();
+        if(ID != null)
+        {
+            region = db.Regions.Single(x => x.ID == Int32.Parse(ID));
+        }
+    }
+
+    protected void GetInfoFromDB()
+    {
+        regions = db.Regions.ToList();
+    }
+
+    protected void AddRegion(Region region)
+    {
+        db.Regions.Add(region);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/regions", true);
+    }
+
+    protected void DeleteRegion(Region region)
+    {
+        db.Regions.Remove(region);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/regions", true);
+    }
+    protected void EditRegion(Region region)
+    {
+        nav.NavigateTo($"/admin/regions/edit/{region.ID}", true);
+    }
+    protected void UpdateRegion(Region region)
+    {
+        db.Regions.Update(region);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/regions/", true);
+    }
+}

@@ -1,0 +1,122 @@
+﻿@page "/ITEquipmentOrders"
+
+<h3>IT Equipment Order Form</h3>
+@using CarePartnersPortal.Data
+@inject NavigationManager NavigationManager
+@inject ApplicationDBContext db
+<br />
+<EditForm Model="@order" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="row">
+        <div class="col-md-5">
+            <!-- #region Employee Name -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Order For:</label><br />
+                <InputText class="form-control" @bind-Value="order.RequestedFor" />
+            </div>
+            <!-- #endregion -->
+            <!-- #region Branch Type -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Branch:</label><br />
+                <InputSelect class="form-control" @bind-Value="order.Branches">
+                    @foreach (Branch branch in order.Branches)
+                    {
+                        <option value="@branch.BranchName">@branch.BranchName</option>
+                    }
+                </InputSelect>
+            </div>
+            <!-- #endregion -->
+            <!-- #region Alt Shipping  -->
+            <div class="form-group">
+                <InputCheckbox @bind-Value="order.OtherAddress" /> <label style="@form.LabelStyle">Check here if you require a different shipping address than the branch.</label>
+            </div>
+            <!-- #endregion -->
+            @if (order.OtherAddress)
+            {
+                <!-- #region Address -->
+                <div class="form-group">
+                    <label style="@form.LabelStyle">Street Address:</label><br />
+                    <InputText class="form-control" @bind-Value="order.Address" />
+                </div>
+                <!-- #endregion -->
+                <!-- #region Suite -->
+                <div class="form-group">
+                    <label style="@form.LabelStyle">Suite:</label><br />
+                    <InputText class="form-control" @bind-Value="order.Suite" />
+                </div>
+                <!-- #endregion -->
+                <!-- #region City -->
+                <div class="form-group">
+                    <label style="@form.LabelStyle">City:</label><br />
+                    <InputText class="form-control" @bind-Value="order.City" />
+                </div>
+                <!-- #endregion -->
+                <!-- #region Postal Code -->
+                <div class="form-group">
+                    <label style="@form.LabelStyle">Postal Code:</label><br />
+                    <InputText class="form-control" @bind-Value="order.PostalCode" />
+                </div>
+                <!-- #endregion -->
+            }
+            <!-- #region Additional Informaiton -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Additional Informaiton:</label><br />
+                <InputTextArea class="form-control" @bind-Value="order.AdditionalInformaiton" />
+            </div>
+            <!-- #endregion -->
+        </div>
+
+    </div>
+    <table class="table">
+        <thread>
+            <tr style="text-align:center">
+                <th>Item</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+            @foreach (OrderItem item in orderItems)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.Price</td>
+                    <td><InputNumber class="form-control" @bind-Value="item.Quantity" /></td>
+                </tr>
+            }
+        </thread>
+    </table>
+    <button class="btn btn-lg btn-primary" type="submit">Submit</button><br /><br />
+    <ValidationSummary />
+</EditForm>
+
+@code {
+    private ITEquipmentOrder order = new ITEquipmentOrder();
+    private GlobalForm form = new GlobalForm();
+    private Email email = new Email();
+    private List<OrderItem> orderItems;
+
+    [Parameter]
+    public string orderID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        GetInfoFromDB();
+        if (orderID != null)
+        {
+            order = db.ITEquipmentOrders.Single(a => a.ID == Int32.Parse(orderID));
+        }
+    }
+
+    protected void HandleValidSubmit()
+    {
+        
+    }
+
+    protected void GetInfoFromDB()
+    {
+        order.Branches = db.Branches.ToList();
+        order.Departments = db.Departments.ToList();
+        orderItems = db.OrderItems.ToList();
+    }
+}

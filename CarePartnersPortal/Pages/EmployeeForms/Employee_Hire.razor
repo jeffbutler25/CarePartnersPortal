@@ -1,0 +1,118 @@
+﻿@page "/Employee/Hire"
+@using CarePartnersPortal.Data
+@inject NavigationManager NavigationManager
+
+    <EditForm Model="@hire" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <h2 style="padding-bottom:15px">Employee Hire Form</h2>
+
+        <div class="col-md-5">
+        <div class="form-group">
+            <label style="@form.LabelStyle">Hire Type:</label><br />
+            <InputSelect class="form-control" @bind-Value="hire.HireType">
+                @foreach (string types in hire.HireTypes)
+                {
+                    <option value="@types">@types</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label style="@form.LabelStyle">Start Date:</label><br />
+            <InputDate class="form-control" @bind-Value="hire.StartDate" />            
+        </div>
+        <div class="form-group">
+            <label style="@form.LabelStyle">First Name:</label><br />
+            <InputText class="form-control" @bind-Value="hire.FirstName" />
+        </div>
+        <div class="form-group">
+            <label style="@form.LabelStyle">Last Name:</label><br />
+            <InputText class="form-control" @bind-Value="hire.LastName" />
+        </div>
+        <div class="form-group">
+            <label style="@form.LabelStyle">Employee Number:</label><br />
+            <InputText class="form-control" @bind-Value="hire.EmployeeNumber" />
+        </div>
+        <div class="form-group">
+            <label style="@form.LabelStyle">Region:</label><br />
+            <InputSelect class="form-control" @bind-Value="hire.Region">
+                @foreach (string branch in form.Branchs)
+                {
+                    <option value="@branch">@branch</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label style="@form.LabelStyle">Department:</label><br />
+            <InputSelect class="form-control" @bind-Value="hire.Department">
+                @foreach (string department in form.Departments)
+                {
+                    <option value="@department">@department</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label style="@form.LabelStyle">Job Title:</label><br />
+            <InputSelect class="form-control" @bind-Value="hire.JobTitle">
+                @foreach (string jobTitle in form.JobTitles)
+                {
+                    <option value="@jobTitle">@jobTitle</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label style="@form.LabelStyle">Additional Requirements:</label><br />
+            <InputTextArea class="form-control" @bind-Value="hire.AdditonalRequirements" />
+        </div>
+</div>
+
+
+        <button class="btn btn-lg btn-primary" type="submit">Submit</button><br /><br />
+        <ValidationSummary />
+    </EditForm>
+
+@code {
+    private EmployeeHire hire = new EmployeeHire();
+    private GlobalForm form = new GlobalForm();
+    private Email email = new Email();
+
+    
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+        }
+    }
+
+    protected void HandleValidSubmit()
+    {
+        email.Subject = $"Employee Exit for {hire.FirstName} {hire.LastName} for {hire.StartDate}";
+        email.From = "jeff.butler@carepartners.ca";
+        email.To = "jeff.butler@carepartners.ca";
+        email.Body = $"Employee Exit for {hire.FirstName} {hire.LastName} for {hire.StartDate}\r\n\r\n";
+        email.Body += $"Hire Type: {hire.HireType}\r\n";
+        email.Body += $"Start Date: {hire.StartDate}\r\n";
+        email.Body += $"Employee Name: {hire.FirstName} {hire.LastName}\r\n";
+        email.Body += $"Region: {hire.Region}\r\n";
+        email.Body += $"Job Title: {hire.JobTitle}\r\n";
+        email.Body += $"Department: {hire.Department}\r\n";
+        email.Body += $"Comments: {hire.AdditonalRequirements}\r\n";
+
+        try
+        {
+            email.Send();
+        }
+        catch
+        {
+            email.From = "CarePartnersPortal@carepartners.ca";
+            try
+            {
+                email.Send();
+            }
+            catch
+            {
+
+            }
+        }
+    }
+}

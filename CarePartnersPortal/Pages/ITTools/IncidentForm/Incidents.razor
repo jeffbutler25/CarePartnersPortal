@@ -1,0 +1,55 @@
+﻿@page "/Incidents"
+
+@using CarePartnersPortal.Data
+@inject NavigationManager nav
+    <h3>Incidents</h3>
+<NavLink class="nav-link" href="incidents/add">
+    Create
+</NavLink>
+<NavLink class="nav-item" href="incidents/edit">
+    Edit
+</NavLink>
+<NavLink class="nav-item" href="incidents/remove">
+    Remove
+</NavLink>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (incidents != null)
+        {
+            foreach (var incident in incidents)
+            {
+                <tr>
+                    <td>@incident.IncidentType</td>
+                    <td>@incident.OutageStart</td>
+                    <td>@incident.OutageEnd</td>
+                    <td>@incident.Status</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<ITIncident> incidents = new List<ITIncident>();
+    private GlobalForm form = new GlobalForm();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+        }
+    }
+
+    protected void HandleValidSubmit()
+    {
+
+    }
+}

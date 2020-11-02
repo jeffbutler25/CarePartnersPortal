@@ -1,0 +1,90 @@
+﻿@page "/Admin/Departments"
+@page "/Admin/Departments/{task}/{ID}"
+@layout MainLayoutAdmin
+@using CarePartnersPortal.Data
+@inject ApplicationDBContext db
+@inject NavigationManager nav
+<h3>Departments</h3>
+<EditForm Model="@department">
+    <table class="table">
+        <thread>
+            <tr style="text-align:center">
+                <th>Department</th>
+                <th>Approvers</th>
+                <th>Action</th>
+            </tr>
+            @foreach (Department department in departments)
+            {
+                if (Task == "edit" && department.ID == Int32.Parse(ID))
+                {
+                    <tr>
+                        <td><InputText class="form-control" @bind-Value="department.DepartmentName" /></td>
+                        <td><InputText class="form-control" @bind-Value="department.Approvers" /></td>
+                        <td><button class="btn btn-primary" @onclick="e => UpdateDepartment(department)">Update</button> <button class="btn btn-primary" @onclick="@(e => DeleteDepartment(department))">Delete</button></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@department.DepartmentName</td>
+                        <td>@department.Approvers</td>
+                        <td><button class="btn btn-primary" @onclick="e => EditDepartment(department)">Edit</button></td>
+                    </tr>
+                }
+            }
+            @if (Task != "edit") {
+                <tr>
+                    <td><InputText class="form-control" @bind-Value="department.DepartmentName" /></td>
+                    <td><InputText class="form-control" @bind-Value="department.Approvers" /></td>
+                    <td><button class="btn btn-primary" @onclick="e => AddDepartment(department)">Add</button></td>
+                </tr>
+            }
+        </thread>
+    </table>
+</EditForm>
+
+@code {
+    List<Department> departments;
+    private Department department = new Department();
+    private GlobalForm form = new GlobalForm();
+    [Parameter]
+    public string Task { get; set; }
+    [Parameter]
+    public string ID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        GetInfoFromDB();
+    }
+
+    protected void GetInfoFromDB()
+    {
+        departments = db.Departments.OrderBy(department => department.DepartmentName).ToList();
+
+    }
+
+    protected void AddDepartment(Department department)
+    {
+        db.Departments.Add(department);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/departments", true);
+    }
+
+    protected void DeleteDepartment(Department department)
+    {
+        db.Departments.Remove(department);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/departments", true);
+    }
+    protected void EditDepartment(Department department)
+    {
+
+        nav.NavigateTo($"/admin/departments/edit/{department.ID}", true);
+    }
+    protected void UpdateDepartment(Department department)
+    {
+        db.Departments.Update(department);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/departments/", true);
+    }
+}

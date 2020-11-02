@@ -1,0 +1,262 @@
+﻿@page "/Employee/Exit"
+@using CarePartnersPortal.Data
+@inject NavigationManager NavigationManager
+
+<h3>Employee Exit</h3>
+
+<EditForm Model="@exit" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="row">
+        <div class="col-md-5">
+            <!-- #region Exit Type -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Exit Type:</label><br />
+                <InputSelect class="form-control" @bind-Value="exit.ExitType">
+                    @foreach (string type in exit.ExitTypes)
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </InputSelect>
+            </div>
+            <!-- #endregion -->
+            <!-- #region Exit Date -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Exit Date:</label><br />
+                <InputDate class="form-control" @bind-Value="exit.ExitDate" />
+            </div>
+            <!-- #endregion -->
+            <!-- #region Employee Name -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Employee Name:</label><br />
+                <InputText class="form-control" @bind-Value="exit.EmployeeName" />
+            </div>
+            <!-- #endregion -->
+            <!-- #region Employee Number -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Employee Number:</label><br />
+                <InputText class="form-control" @bind-Value="exit.EmployeeNumber" />
+            </div>
+            <!-- #endregion -->
+            <!-- #region Branch -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Region:</label><br />
+                <InputSelect class="form-control" @bind-Value="exit.Region">
+                    @foreach (string branch in form.Branchs)
+                    {
+                        <option value="@branch">@branch</option>
+                    }
+                </InputSelect>
+            </div>
+            <!-- #endregion -->
+            <!-- #region Department -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Department:</label><br />
+                <InputSelect class="form-control" @bind-Value="exit.Department">
+                    @foreach (string department in form.Departments)
+                    {
+                        <option value="@department">@department</option>
+                    }
+                </InputSelect>
+            </div>
+            <!-- #endregion -->
+            <!-- #region Job Title -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Job Title:</label><br />
+                <InputSelect class="form-control" @bind-Value="exit.JobTitle">
+                    @foreach (string jobTitle in form.JobTitles)
+                    {
+                        <option value="@jobTitle">@jobTitle</option>
+                    }
+                </InputSelect>
+            </div>
+            <!-- #endregion -->
+            <!-- #region Hardware Returned -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Hardware Returned:</label><br />
+                <InputSelect class="form-control" @bind-Value="exit.HardwareReturned">
+                    @foreach (string yesNo in form.YesNo)
+                    {
+                        <option value="@yesNo">@yesNo</option>
+                    }
+                </InputSelect>
+            </div>
+            <!-- #endregion -->
+            <!-- #region Hardware Comments -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Hardware Comments:</label><br />
+                @if (exit.HardwareReturned == "Yes")
+                {
+                    <label style="color:red">Please provide details on what hardware was returned. Include SIM IMEI S/N if relevant.</label>
+                }
+                @if (exit.HardwareReturned == "No")
+                {
+                    <label style="color:red">Please provide details on why the hardware wasn't returned.</label>
+                }
+                <br />
+                <InputTextArea class="form-control" @bind-Value="exit.HardwareComments" />
+            </div>
+            <!-- #endregion -->
+        </div>
+        <div class="col-md-5">
+            <!-- #region Set Out of Office-->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Set Out of Office Required:</label><br />
+                <InputSelect class="form-control" @bind-Value="exit.SetOutOfOffice">
+                    @foreach (string yesNo in form.YesNo)
+                    {
+                        <option value="@yesNo">@yesNo</option>
+                    }
+                </InputSelect>
+            </div>
+
+            @if (exit.SetOutOfOffice == "Yes")
+            {
+                <div class="form-group">
+                    <label style="@form.LabelStyle">Set Out of Office To:</label><br />
+                    <InputText class="form-control" @bind-Value="exit.SetOutOfOfficeTo" />
+                </div>
+            }
+
+            <!-- #endregion -->
+            <!-- #region Email Forwarding -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Email Forwarding Required:</label><br />
+                <InputSelect class="form-control" @bind-Value="exit.ForwardEmail">
+                    @foreach (string yesNo in form.YesNo)
+                    {
+                        <option value="@yesNo">@yesNo</option>
+                    }
+                </InputSelect>
+            </div>
+
+            @if (exit.ForwardEmail == "Yes")
+            {
+                <div class="form-group">
+                    <label style="@form.LabelStyle">Forward Email To:</label><br />
+                    <InputText class="form-control" @bind-Value="exit.ForwardEmailTo" />
+                </div>
+            }
+
+            <!-- #endregion -->
+            <!-- #region Email Access-->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Access To Email Required:</label><br />
+                <InputSelect class="form-control" @bind-Value="exit.AccessToEmail">
+                    @foreach (string yesNo in form.YesNo)
+                    {
+                        <option value="@yesNo">@yesNo</option>
+                    }
+                </InputSelect>
+            </div>
+
+            @if (exit.AccessToEmail == "Yes")
+            {
+                <div class="form-group">
+                    <label style="@form.LabelStyle">Provide Email Access To:</label><br />
+                    <InputText class="form-control" @bind-Value="exit.AccessToEmailFor" />
+                </div>
+            }
+
+            <!-- #endregion -->
+            <!-- #region Set Out of Office-->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Access to Stored Files Required:</label><br />
+                <InputSelect class="form-control" @bind-Value="exit.AccessToStoredFiles">
+                    @foreach (string yesNo in form.YesNo)
+                    {
+                        <option value="@yesNo">@yesNo</option>
+                    }
+                </InputSelect>
+            </div>
+
+            @if (exit.AccessToStoredFiles == "Yes")
+            {
+                <div class="form-group">
+                    <label style="@form.LabelStyle">Give Access to Stored Files To:</label><br />
+                    <InputText class="form-control" @bind-Value="exit.AccessToStoredFilesFor" />
+                </div>
+            }
+
+            <!-- #endregion -->
+            <!-- #region Additional Details -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Additional Details:</label><br />
+                <InputTextArea class="form-control" @bind-Value="exit.AdditionalDetails" />
+            </div>
+            <!-- #endregion -->
+        </div>
+    </div>
+    <button class="btn btn-lg btn-primary" type="submit">Submit</button><br /><br />
+    <ValidationSummary />
+</EditForm>
+
+@code {
+    private EmployeeExit exit = new EmployeeExit();
+    private GlobalForm form = new GlobalForm();
+    private Email email = new Email();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+        }
+    }
+
+    protected void HandleValidSubmit()
+    {
+        #region Email
+        email.Subject = $"Employee Exit for {exit.EmployeeName} for {exit.ExitDate}";
+        email.From = "jeff.butler@carepartners.ca";
+        email.To = "supoort@carepartners.ca";
+        if (exit.ForwardEmail == "Yes" || exit.SetOutOfOffice == "Yes"|| exit.AccessToEmail == "Yes"|| exit.AccessToStoredFiles == "Yes")
+        {
+            email.CC = "hassan.asif@carepartners.ca";
+        }
+
+        email.Body = $"Employee Exit for {exit.EmployeeName} for {exit.ExitDate} \r\n\r\n";
+        email.Body += $"Exit Type: {exit.ExitType}\r\n";
+        email.Body += $"Exit Date: {exit.ExitDate}\r\n";
+        email.Body += $"Employee Name: {exit.EmployeeName}\r\n";
+        email.Body += $"Region: {exit.Region}\r\n";
+        email.Body += $"Job Title: {exit.JobTitle}\r\n";
+        email.Body += $"Department: {exit.Department}\r\n";
+        email.Body += $"Hardware Returned: {exit.HardwareReturned}\r\n";
+        email.Body += $"Hardware Comments: {exit.HardwareComments}\r\n\r\n";
+        email.Body += $"Comments: {exit.AdditionalDetails}\r\n\r\n";
+        if (exit.ForwardEmail == "Yes")
+        {
+            email.Body += $"Forward Email To: {exit.ForwardEmailTo}\r\n";
+        }
+        if (exit.SetOutOfOffice == "Yes")
+        {
+            email.Body += $"Set Out of Office To: {exit.SetOutOfOfficeTo}\r\n";
+        }
+        if (exit.AccessToEmail == "Yes")
+        {
+            email.Body += $"Profide Access to Email to: {exit.AccessToEmailFor}\r\n";
+        }
+        if (exit.AccessToStoredFiles == "Yes")
+        {
+            email.Body += $"Profide Access to Stored Files to: {exit.AccessToStoredFilesFor}\r\n";
+        }
+
+        #endregion
+
+        try
+        {
+            email.Send();
+        }
+        catch
+        {
+            email.From = "CarePartnersPortal@carepartners.ca";
+            try
+            {
+                email.Send();
+            }
+            catch
+            {
+
+            }
+        }
+    }
+}

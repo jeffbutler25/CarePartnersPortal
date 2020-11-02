@@ -1,0 +1,72 @@
+﻿@page "/Admin/ITOrderItems"
+@layout MainLayoutAdmin
+@using CarePartnersPortal.Data
+@inject ApplicationDBContext db
+@inject NavigationManager nav
+<h3>IT Order Items</h3>
+<EditForm Model="@orderItem">
+    <table class="table">
+        <thread>
+            <tr>
+                <th>Name</th>
+                <th>Details</th>
+                <th>Price</th>
+            </tr>
+
+                @foreach (OrderItem order in orderItems)
+                {
+                    <tr>
+                        <td>@order.Name</td>
+                        <td>@order.Description</td>
+                        <td>@order.Price</td>
+                        <td><button class="btn btn-primary" @onclick="Change">Edit</button> <button class="btn btn-primary" @onclick="@(e => DeleteFromDB(order))">Delete</button></td>
+                    </tr>
+                }
+
+            <tr>
+                <td><InputText class="form-control" @bind-Value="orderItem.Name" /></td>
+                <td><InputText class="form-control" @bind-Value="orderItem.Description" /></td>
+                <td><InputNumber class="form-control" @bind-Value="orderItem.Price" /></td>
+                <td><button class="btn btn-primary" @onclick="AddToDB">Add</button></td>
+            </tr>
+        </thread>
+    </table>
+</EditForm>
+
+@code {
+
+    List<OrderItem> orderItems;
+
+    private OrderItem orderItem = new OrderItem();
+    private GlobalForm form = new GlobalForm();
+
+    protected override void OnInitialized()
+    {
+        GetInfoFromDB();
+    }
+
+    protected void GetInfoFromDB()
+    {
+        orderItems = db.OrderItems.ToList();
+
+    }
+
+    protected void AddToDB()
+    {
+        db.OrderItems.Add(orderItem);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/ITOrderItems", true);
+    }
+
+    protected void DeleteFromDB(OrderItem orderItem)
+    {
+        db.OrderItems.Remove(orderItem);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/ITOrderItems", true);
+    }
+    protected void Change()
+    {
+
+        nav.NavigateTo("/admin/ITOrderItems", true);
+    }
+}

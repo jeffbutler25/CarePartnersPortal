@@ -1,0 +1,66 @@
+﻿@page "/activeusers"
+<h3>Active Users</h3>
+
+@using CarePartnersPortal.Data
+@inject ADService adService
+
+<select @onchange="DoStuff">
+    @foreach (var location in locatons)
+    {
+        <option value=@location>@location</option>
+    }
+</select>
+
+<input type="button" text="Search" class="btn btn-lg" @onclick="GetUers" />
+ 
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (users != null)
+        {
+            foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+@code {
+    List<string> locatons = new List<string>() { "", "WW", "SW", "Washburn", "CE" };
+    string selectedlocation;
+    private List<ADUser> users = new List<ADUser>();
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            adService.SetupUsers();
+        }
+    }
+
+    protected void GetUers()
+    {
+        users = adService.GetActiveUsers();
+        StateHasChanged();
+    }
+
+    protected void DoStuff(ChangeEventArgs e)
+    {
+        selectedlocation = e.Value.ToString();
+        GetUers();
+    }
+
+}

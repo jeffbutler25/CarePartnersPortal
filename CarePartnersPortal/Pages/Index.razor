@@ -1,0 +1,29 @@
+﻿@page "/"
+
+@attribute [Authorize(Policy = "Admin")]
+
+@*<AuthorizeView>
+
+Hello, @context.User.Identity.Name
+
+</AuthorizeView>*@
+test
+@code{
+
+    string emp = string.Empty;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    await GetCurrentUser();
+
+    //}
+
+    //private async Task GetCurrentUser()
+    //{
+    //    var username = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+
+
+    //}
+
+}

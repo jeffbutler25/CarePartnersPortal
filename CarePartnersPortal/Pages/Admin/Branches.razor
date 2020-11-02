@@ -1,0 +1,86 @@
+﻿@page "/Admin/Branches"
+@page "/Admin/Branches/{task}/{ID}"
+@layout MainLayoutAdmin
+@using CarePartnersPortal.Data
+@inject ApplicationDBContext db
+@inject NavigationManager nav
+<h3>Branches</h3>
+<EditForm Model="@branch">
+    <table class="table">
+        <thread>
+            <tr style="text-align:center">
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+            @foreach (Branch branch in branches)
+            {
+                if (Task == "edit" && branch.ID == Int32.Parse(ID))
+                {
+                    <tr>
+                        <InputText class="form-control" @bind-Value="branch.BranchName" />
+                        <td><button class="btn btn-primary btn-sm" @onclick="e => UpdateBranch(branch)">Update</button> <button class="btn btn-primary btn-sm" @onclick="@(e => DeleteBranch(branch))">Delete</button></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@branch.BranchName</td>
+                        <td><button class="btn btn-primary btn-sm" @onclick="e => EditBranch(branch)">Edit</button></td>
+                    </tr>
+                }
+            }
+            @if (Task != "edit")
+            {
+                <tr>
+                    <td><InputText class="form-control" @bind-Value="branch.BranchName" /></td>
+                    <td><button class="btn btn-primary btn-sm" @onclick="e => AddBranch(branch)">Add</button></td>
+                </tr>
+            }
+            </thread>
+    </table>
+</EditForm>
+
+@code {
+    List<Branch> branches;
+    private Branch branch = new Branch();
+    private GlobalForm form = new GlobalForm();
+    [Parameter]
+    public string Task { get; set; }
+    [Parameter]
+    public string ID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        GetInfoFromDB();
+    }
+
+    protected void GetInfoFromDB()
+    {
+        branches = db.Branches.OrderBy(branch => branch.BranchName).ToList();
+    }
+
+    protected void AddBranch(Branch branch)
+    {
+        db.Branches.Add(branch);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/branches", true);
+    }
+
+    protected void DeleteBranch(Branch branch)
+    {
+        db.Branches.Remove(branch);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/branches", true);
+    }
+    protected void EditBranch(Branch branch)
+    {
+
+        nav.NavigateTo($"/admin/branches/edit/{branch.ID}", true);
+    }
+    protected void UpdateBranch(Branch branch)
+    {
+        db.Update(branch);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/branches", true);
+    }
+}

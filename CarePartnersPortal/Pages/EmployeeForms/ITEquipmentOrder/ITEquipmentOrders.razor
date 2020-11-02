@@ -1,0 +1,26 @@
+﻿@page "/admin/ITEquipmentOrders"
+
+<h3>ITEquipmentOrders</h3>
+@using CarePartnersPortal.Data
+<table class="table">
+    <thread>
+        <tr style="text-align:center">
+            <th>Department</th>
+            <th>Approvers</th>
+            <th>Action</th>
+        </tr>
+        @foreach (ITEquipmentOrder order in orders)
+        {
+            <tr>
+            </tr>
+        }
+    </thread>
+</table>
+
+@code {
+
+    private List<ITEquipmentOrder> orders = new List<ITEquipmentOrder>();
+
+
+
+}

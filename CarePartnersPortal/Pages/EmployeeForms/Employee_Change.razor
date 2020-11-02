@@ -1,0 +1,129 @@
+﻿@page "/Employee/Change"
+@using CarePartnersPortal.Data
+@inject NavigationManager NavigationManager
+
+<h3>Employee Exit</h3>
+
+<EditForm Model="@change" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="row">
+        <div class="col-md-5">
+            <!-- #region Change Type -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Change Type:</label><br />
+                <InputSelect class="form-control" @bind-Value="change.ChangeType">
+                    @foreach (string type in change.ChangeTypes)
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </InputSelect>
+            </div>
+            <!-- #endregion -->
+            <!-- #region Employee Name -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Employee Name:</label><br />
+                <InputText class="form-control" @bind-Value="change.EmployeeName" />
+            </div>
+            <!-- #endregion -->
+            <!-- #region Branch -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Region:</label><br />
+                <InputSelect class="form-control" @bind-Value="change.Region">
+                    @foreach (string branch in form.Branchs)
+                    {
+                        <option value="@branch">@branch</option>
+                    }
+                </InputSelect>
+            </div>
+            <!-- #endregion -->
+            <!-- #region Effective Date -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Effective Date:</label><br />
+                <InputDate class="form-control" @bind-Value="change.DateChangeRequired" />
+            </div>
+            <!-- #endregion -->
+            <!-- #region New Name -->
+            @if (change.ChangeType == "Name Change")
+            {
+                <div class="form-group">
+                    <label style="@form.LabelStyle">New Name:</label><br />
+                    <InputText class="form-control" @bind-Value="change.NewName" />
+                </div>
+            }
+            <!-- #endregion -->
+            <!-- #region Job Title -->
+            @if (change.ChangeType == "Job Title")
+            {
+                <div class="form-group">
+                    <label style="@form.LabelStyle">New Title:</label><br />
+                    <InputSelect class="form-control" @bind-Value="change.JobTitle">
+                        @foreach (string title in form.JobTitles)
+                            {
+                            <option value="@title">@title</option>
+                            }                        
+                    </InputSelect>
+                </div>
+            }
+            <!-- #endregion -->
+            <!-- #region Additional Details -->
+            <div class="form-group">
+                <label style="@form.LabelStyle">Additional Details:</label><br />
+                <InputTextArea class="form-control" @bind-Value="change.AdditionalDetails" />
+            </div>
+            <!-- #endregion -->
+        </div>
+    </div>
+    <button class="btn btn-lg btn-primary" type="submit">Submit</button><br /><br />
+    <ValidationSummary />
+</EditForm>
+
+@code {
+    private EmployeeChange change = new EmployeeChange();
+    private GlobalForm form = new GlobalForm();
+    private Email email = new Email();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+        }
+    }
+
+    protected void HandleValidSubmit()
+    {
+        email.Subject = $"Employee Exit for {change.EmployeeName} for {change.DateChangeRequired}";
+        email.From = "jeff.butler@carepartners.ca";
+        email.To = "jeff.butler@carepartners.ca";
+        email.Body = $"Employee Exit for {change.EmployeeName} for {change.DateChangeRequired}\r\n\r\n";
+        email.Body += $"Exit Type: {change.ChangeType}\r\n";
+        email.Body += $"Exit Date: {change.DateChangeRequired}\r\n";
+        email.Body += $"Employee Name: {change.EmployeeName}\r\n";
+        email.Body += $"Region: {change.Region}\r\n";
+        if (change.ChangeType == "Name Change")
+        {
+            email.Body += $"New Name: {change.NewName}\r\n";
+        }
+        if (change.ChangeType == "Job Title")
+        {
+            email.Body += $"New Title: {change.JobTitle}\r\n";
+        }
+        email.Body += $"Additional Details: {change.AdditionalDetails}\r\n";
+
+        try
+        {
+            email.Send();
+        }
+        catch
+        {
+            email.From = "CarePartnersPortal@carepartners.ca";
+            try
+            {
+                email.Send();
+            }
+            catch
+            {
+
+            }
+        }
+    }
+}
