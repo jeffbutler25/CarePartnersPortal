@@ -11,5 +11,6 @@ namespace CarePartnersPortal
         [Key]
         public int ID { get; set; }
         public string BranchName { get; set; }
+        public string Approvers { get; set; }
     }
 }

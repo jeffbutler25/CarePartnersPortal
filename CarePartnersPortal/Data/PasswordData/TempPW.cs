@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CarePartnersPortal
 {
-    public class Temppwholder
+    public class TempPW
     {
         [Key]
         public int ID { get; set; }

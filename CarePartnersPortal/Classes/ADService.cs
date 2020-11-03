@@ -11,44 +11,19 @@ namespace CarePartnersPortal
     public class ADService
     {
         private static readonly DirectoryEntry directoryOperationsEntry = new DirectoryEntry("LDAP://ou=operations,ou=cp,DC=carepartners,DC=local");
-        List<ADUser> users = new List<ADUser>();
-        public void SetupUsers()
-        {
-                      
-        }
+         
         public List<ADUser> GetActiveUsers()
         {
-
-
-
-            //List<string> allUsers = new List<string>();
-
-            // create your domain context and define the OU container to search in
-            PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "Carepartners",
-                                                        "OU=cp,dc=carepartners,dc=local");
-
-            // define a "query-by-example" principal - here, we search for a UserPrincipal (user)
+            List<ADUser> users = new List<ADUser>();
+            PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "Carepartners", "OU=cp,dc=carepartners,dc=local");
             UserPrincipal qbeUser = new UserPrincipal(ctx);
-
-            // create your principal searcher passing in the QBE principal    
             PrincipalSearcher srch = new PrincipalSearcher(qbeUser);
 
-            // find all matches
             foreach (var found in srch.FindAll())
-            {
-                // do whatever here - "found" is of type "Principal" - it could be user, group, computer.....          
-                //allUsers.Add(found.DisplayName);
-                
+            {               
                  users.Add(new ADUser() { Name = found.Name, FirstName = found.SamAccountName, LastName = found.UserPrincipalName });
             }
-            return users;
-            
-
-            //else
-            //{
-            //    return users.Where(x => x.Location == location).ToList(); 
-            //}
-
+            return users; 
         }
 
         public List<string> GetOperationsUserOUs()
@@ -74,6 +49,20 @@ namespace CarePartnersPortal
             return res;
         }
 
-        
+        public static string GetEmailAddress(string username)
+        {
+            using (PrincipalContext ctx = new PrincipalContext(ContextType.Domain))
+            {
+                UserPrincipal user = UserPrincipal.FindByIdentity(ctx, username);
+                if (user != null)
+                {
+                    return user.EmailAddress;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+        }       
     }
 }
