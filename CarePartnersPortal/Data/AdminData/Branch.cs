@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace CarePartnersPortal
 {
-    public class Department
+    public class Branch
     {
         [Key]
         public int ID { get; set; }
-        public string DepartmentName { get; set; }
+        public string Name { get; set; }
         public string Approvers { get; set; }
     }
 }

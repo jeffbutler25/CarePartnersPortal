@@ -1,9 +1,9 @@
 ﻿@page "/Admin/Regions"
 @page "/Admin/Regions/{Task}/{ID}"
 @layout MainLayoutAdmin
-@using CarePartnersPortal.Data
-@inject ApplicationDBContext db
+@inject DBContext db
 @inject NavigationManager nav
+
 <h3>Region</h3>
 <EditForm Model="@region">
     <table class="table">
@@ -20,7 +20,7 @@
                     if (Task == "edit" && region.ID == Int32.Parse(ID))
                     {
                         <tr>
-                            <td><InputText class="form-control" @bind-Value="region.RegionName" /></td>
+                            <td><InputText class="form-control" @bind-Value="region.Name" /></td>
                             <td><InputText class="form-control" @bind-Value="region.Approvers" /></td>
                             <td><button class="btn btn-primary btn-sm" @onclick="e => UpdateRegion(region)">Update</button> <button class="btn btn-primary btn-sm" @onclick="@(e => DeleteRegion(region))">Delete</button></td>
                         </tr>
@@ -28,7 +28,7 @@
                     else
                     {
                         <tr>
-                            <td>@region.RegionName</td>
+                            <td>@region.Name</td>
                             <td>@region.Approvers</td>
                             <td><button class="btn btn-primary btn-sm" @onclick="e => EditRegion(region)">Edit</button></td>
                         </tr>
@@ -38,7 +38,7 @@
             @if (Task != "edit")
             {
                 <tr>
-                    <td><InputText class="form-control" @bind-Value="region.RegionName" /></td>
+                    <td><InputText class="form-control" @bind-Value="region.Name" /></td>
                     <td><InputText class="form-control" @bind-Value="region.Approvers" /></td>
                     <td><button class="btn btn-primary btn-sm" @onclick="e => AddRegion(region)">Add</button></td>
                 </tr>
@@ -52,8 +52,6 @@
     List<Region> regions;
 
     private Region region = new Region();
-    private GlobalForm form = new GlobalForm();
-
 
     [Parameter]
     public string Task { get; set; }

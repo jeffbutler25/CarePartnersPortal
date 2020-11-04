@@ -1,6 +1,5 @@
 ﻿@page "/Incidents"
 
-@using CarePartnersPortal.Data
 @inject NavigationManager nav
     <h3>Incidents</h3>
 <NavLink class="nav-link" href="incidents/add">
@@ -22,15 +21,15 @@
         </tr>
     </thead>
     <tbody>
-        @if (incidents != null)
+        @if (outages != null)
         {
-            foreach (var incident in incidents)
+            foreach (var outage in outages)
             {
                 <tr>
-                    <td>@incident.IncidentType</td>
-                    <td>@incident.OutageStart</td>
-                    <td>@incident.OutageEnd</td>
-                    <td>@incident.Status</td>
+                    <td>@outage.IncidentType</td>
+                    <td>@outage.OutageStart</td>
+                    <td>@outage.OutageEnd</td>
+                    <td>@outage.Status</td>
                 </tr>
             }
         }
@@ -38,8 +37,7 @@
 </table>
 
 @code {
-    private List<ITIncident> incidents = new List<ITIncident>();
-    private GlobalForm form = new GlobalForm();
+    private List<ITOutage> outages = new List<ITOutage>();
 
     protected override void OnAfterRender(bool firstRender)
     {

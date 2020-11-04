@@ -3,7 +3,7 @@
 <h3>IT Equipment Order Form</h3>
 @using CarePartnersPortal.Data
 @inject NavigationManager NavigationManager
-@inject ApplicationDBContext db
+@inject DBContext db
 <br />
 <EditForm Model="@order" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -11,56 +11,56 @@
         <div class="col-md-5">
             <!-- #region Employee Name -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Order For:</label><br />
+                <label style="text-align:right">Order For:</label><br />
                 <InputText class="form-control" @bind-Value="order.RequestedFor" />
             </div>
             <!-- #endregion -->
             <!-- #region Branch Type -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Branch:</label><br />
+                <label style="text-align:right">Branch:</label><br />
                 <InputSelect class="form-control" @bind-Value="order.Branches">
                     @foreach (Branch branch in order.Branches)
                     {
-                        <option value="@branch.BranchName">@branch.BranchName</option>
+                        <option value="@branch.Name">@branch.Name</option>
                     }
                 </InputSelect>
             </div>
             <!-- #endregion -->
             <!-- #region Alt Shipping  -->
             <div class="form-group">
-                <InputCheckbox @bind-Value="order.OtherAddress" /> <label style="@form.LabelStyle">Check here if you require a different shipping address than the branch.</label>
+                <InputCheckbox @bind-Value="order.OtherAddress" /> <label style="text-align:right">Check here if you require a different shipping address than the branch.</label>
             </div>
             <!-- #endregion -->
             @if (order.OtherAddress)
             {
                 <!-- #region Address -->
                 <div class="form-group">
-                    <label style="@form.LabelStyle">Street Address:</label><br />
+                    <label style="text-align:right">Street Address:</label><br />
                     <InputText class="form-control" @bind-Value="order.Address" />
                 </div>
                 <!-- #endregion -->
                 <!-- #region Suite -->
                 <div class="form-group">
-                    <label style="@form.LabelStyle">Suite:</label><br />
+                    <label style="text-align:right">Suite:</label><br />
                     <InputText class="form-control" @bind-Value="order.Suite" />
                 </div>
                 <!-- #endregion -->
                 <!-- #region City -->
                 <div class="form-group">
-                    <label style="@form.LabelStyle">City:</label><br />
+                    <label style="text-align:right">City:</label><br />
                     <InputText class="form-control" @bind-Value="order.City" />
                 </div>
                 <!-- #endregion -->
                 <!-- #region Postal Code -->
                 <div class="form-group">
-                    <label style="@form.LabelStyle">Postal Code:</label><br />
+                    <label style="text-align:right">Postal Code:</label><br />
                     <InputText class="form-control" @bind-Value="order.PostalCode" />
                 </div>
                 <!-- #endregion -->
             }
             <!-- #region Additional Informaiton -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Additional Informaiton:</label><br />
+                <label style="text-align:right">Additional Informaiton:</label><br />
                 <InputTextArea class="form-control" @bind-Value="order.AdditionalInformaiton" />
             </div>
             <!-- #endregion -->

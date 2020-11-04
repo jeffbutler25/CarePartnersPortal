@@ -1,9 +1,9 @@
 ﻿@page "/getpasswords"
 <h3>Pwprovider</h3>
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject ApplicationDBContext db
+@inject DBContext db
 @using System.Security.Claims
-@using CarePartnersPortal.Data
+
 
 <table class="table">
     <thread>
@@ -11,7 +11,7 @@
             <th>Code</th>
             <th>Password</th>
         </tr>
-        @foreach (Temppwholder pwd in pwds)
+        @foreach (TempPW pwd in pwds)
         {
             <tr>
                 <td>@pwd.Code</td>
@@ -25,8 +25,7 @@
 @code {
 
     private GlobalForm form = new GlobalForm();
-    private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
-    private List<Temppwholder> pwds;
+    private List<TempPW> pwds;
     private string currentUser;
 
     protected override async Task OnInitializedAsync()
@@ -37,17 +36,17 @@
 
     protected void GetInfoFromDB()
     {
-        pwds = db.Temppwholders.Where(x => x.Access.Contains(currentUser)).ToList();
-        foreach(Temppwholder pw in pwds)
+        pwds = db.TempPWs.Where(x => x.Access.Contains(currentUser)).ToList();
+        foreach(TempPW pw in pwds)
         {
-            pw.Password = CarePartnersPortal.Classes.Password.DecodeFrom64(pw.Password);
+            pw.Password = EncryptionService.DecodeString(pw.Password);
         }
 
     }
 
     private async Task GetCurrentUser()
     {
-        currentUser = CarePartnersPortal.Classes.AD.GetCurrentUser(await AuthenticationStateProvider.GetAuthenticationStateAsync());
+        currentUser = ADService.GetCurrentUser(await AuthenticationStateProvider.GetAuthenticationStateAsync());
     }
 
 }

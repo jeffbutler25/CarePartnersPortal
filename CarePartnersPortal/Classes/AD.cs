@@ -25,19 +25,6 @@ namespace CarePartnersPortal
             }
         }
 
-        public static string GetCurrentUser(AuthenticationState userState)
-        {
-
-            if (userState.User.Identity.IsAuthenticated)
-            {
-
-                return userState.User.Identity.Name.Substring(13).ToString();
-
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }       
+        
     }
 }

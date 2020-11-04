@@ -1,7 +1,7 @@
 ﻿@page "/activeusers"
 <h3>Active Users</h3>
 
-@using CarePartnersPortal.Data
+
 @inject ADService adService
 
 <select @onchange="DoStuff">
@@ -47,7 +47,7 @@
     {
         if (firstRender)
         {
-            adService.SetupUsers();
+
         }
     }
 

@@ -26,17 +26,6 @@ namespace CarePartnersPortal
         [Required,Display(Name = "Hire Type")]
         public string HireType { get; set; }
         public string EmployeeNumber { get; set; }
-        public string AdditonalRequirements { get; set; }
-        public List<string> HireTypes { get; set; }
-
-        public EmployeeHire()
-        {
-            HireTypes = new List<string>()
-            {
-                "",
-                "New Employee",
-                "Returning Employee",
-            };
-        }
+        public string AdditonalRequirements { get; set; }        
     }
 }

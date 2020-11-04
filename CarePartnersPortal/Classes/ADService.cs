@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace CarePartnersPortal
 
@@ -63,6 +64,20 @@ namespace CarePartnersPortal
                     return string.Empty;
                 }
             }
-        }       
+        }
+        public static string GetCurrentUser(AuthenticationState userState)
+        {
+
+            if (userState.User.Identity.IsAuthenticated)
+            {
+
+                return userState.User.Identity.Name.Substring(13).ToString();
+
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
     }
 }

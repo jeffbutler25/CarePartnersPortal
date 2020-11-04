@@ -1,6 +1,93 @@
-﻿@page "/incidents/add"
-<h3>Add Incident</h3>
+﻿@page "/outagenotification"
+<h3>placeholder</h3>
+@inject DBContext db
+<EditForm Model="outage" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        @*@foreach(var item in itSystems)
+        {
+            <div>
+                <InputCheckbox @bind-Value="item.Impacted"></InputCheckbox>
+            </div>
+        }*@
+        <table class="table">
+            @for (int i = 0; i < (itSystems.Count / 4) +1 ; i++)
+            {
+                <tr>
+                    @for (int j = 0; j <= 5; j++)
+                    {
+                        if (count == itSystems.Count)
+                        {
+                            break;
+                        }
+                        else {
+                            <td>
+
+                                <InputCheckbox @bind-Value="itSystems[count].Impacted">@itSystems[count].Name</InputCheckbox>
+                                @{count++; }
+                            </td>
+                        }
+
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    @*<div class="form-group">
+        <label style="text-align:right">Outage Type:</label><br />
+        <InputSelect class="form-control" @bind-Value="outage.IncidentType">
+            <option value="Scheduled Maintenance">Scheduled Maintenance</option>,
+            <option value="Outage">Outage</option>
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label style="text-align:right">Start:</label><br />
+        <InputDate class="form-control" @bind-Value="outage.OutageStart" />
+    </div>
+
+    <div class="form-group">
+        <label style="text-align:right">End:</label><br />
+        <InputDate class="form-control" @bind-Value="outage.OutageEnd" />
+    </div>
+
+    <div class="form-group">
+        <label style="text-align:right">Details:</label><br />
+        <InputTextArea class="form-control" @bind-Value="outage.Details" />
+    </div>*@
+
+
+</EditForm>
 
 @code {
+    private int count;
+    ITOutage outage = new ITOutage();
+    Email notification = new Email();
+    List<ITSystem> itSystems = new List<ITSystem>();
+    ITSystem sys = new ITSystem();
+    private bool test = false;
+    protected override void OnInitialized()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            itSystems.Add(new ITSystem() { Name = i.ToString() });
+        }
+        GetInfoFromDB();
+    }
+
+    protected void HandleValidSubmit()
+    {
+        SendNotificaiton();
+    }
+
+    protected void SendNotificaiton()
+    {
+
+    }
+    protected void GetInfoFromDB()
+    {
+        //itSystems = db.ITSystems.ToList();
+    }
 
 }
+

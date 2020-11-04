@@ -1,6 +1,7 @@
 ﻿@page "/Employee/Hire"
 @using CarePartnersPortal.Data
 @inject NavigationManager NavigationManager
+@inject DBContext db
 
     <EditForm Model="@hire" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
@@ -8,59 +9,59 @@
 
         <div class="col-md-5">
         <div class="form-group">
-            <label style="@form.LabelStyle">Hire Type:</label><br />
+            <label style="text-align:right">Hire Type:</label><br />
             <InputSelect class="form-control" @bind-Value="hire.HireType">
-                @foreach (string types in hire.HireTypes)
+                @foreach (HireType types in db.HireTypes)
                 {
-                    <option value="@types">@types</option>
+                    <option value="@types.Type">@types.Type</option>
                 }
             </InputSelect>
         </div>
         <div class="form-group">
-            <label style="@form.LabelStyle">Start Date:</label><br />
+            <label style="text-align:right">Start Date:</label><br />
             <InputDate class="form-control" @bind-Value="hire.StartDate" />            
         </div>
         <div class="form-group">
-            <label style="@form.LabelStyle">First Name:</label><br />
+            <label style="text-align:right">First Name:</label><br />
             <InputText class="form-control" @bind-Value="hire.FirstName" />
         </div>
         <div class="form-group">
-            <label style="@form.LabelStyle">Last Name:</label><br />
+            <label style="text-align:right">Last Name:</label><br />
             <InputText class="form-control" @bind-Value="hire.LastName" />
         </div>
         <div class="form-group">
-            <label style="@form.LabelStyle">Employee Number:</label><br />
+            <label style="text-align:right">Employee Number:</label><br />
             <InputText class="form-control" @bind-Value="hire.EmployeeNumber" />
         </div>
         <div class="form-group">
-            <label style="@form.LabelStyle">Region:</label><br />
+            <label style="text-align:right">Region:</label><br />
             <InputSelect class="form-control" @bind-Value="hire.Region">
-                @foreach (string branch in form.Branchs)
+                @foreach (Branch branch in db.Branches)
                 {
-                    <option value="@branch">@branch</option>
+                    <option value="@branch.Name">@branch.Name</option>
                 }
             </InputSelect>
         </div>
         <div class="form-group">
-            <label style="@form.LabelStyle">Department:</label><br />
+            <label style="text-align:right">Department:</label><br />
             <InputSelect class="form-control" @bind-Value="hire.Department">
-                @foreach (string department in form.Departments)
+                @foreach (Department department in db.Departments)
                 {
-                    <option value="@department">@department</option>
+                    <option value="@department.Name">@department.Name</option>
                 }
             </InputSelect>
         </div>
         <div class="form-group">
-            <label style="@form.LabelStyle">Job Title:</label><br />
+            <label style="text-align:right">Job Title:</label><br />
             <InputSelect class="form-control" @bind-Value="hire.JobTitle">
-                @foreach (string jobTitle in form.JobTitles)
+                @foreach (JobTitle jobTitle in db.JobTitles)
                 {
-                    <option value="@jobTitle">@jobTitle</option>
+                    <option value="@jobTitle.Name">@jobTitle.Name</option>
                 }
             </InputSelect>
         </div>
         <div class="form-group">
-            <label style="@form.LabelStyle">Additional Requirements:</label><br />
+            <label style="text-align:right">Additional Requirements:</label><br />
             <InputTextArea class="form-control" @bind-Value="hire.AdditonalRequirements" />
         </div>
 </div>

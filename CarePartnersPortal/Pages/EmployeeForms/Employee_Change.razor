@@ -1,6 +1,6 @@
 ﻿@page "/Employee/Change"
-@using CarePartnersPortal.Data
 @inject NavigationManager NavigationManager
+@inject DBContext db
 
 <h3>Employee Exit</h3>
 
@@ -10,7 +10,7 @@
         <div class="col-md-5">
             <!-- #region Change Type -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Change Type:</label><br />
+                <label style="text-align:right">Change Type:</label><br />
                 <InputSelect class="form-control" @bind-Value="change.ChangeType">
                     @foreach (string type in change.ChangeTypes)
                     {
@@ -21,24 +21,24 @@
             <!-- #endregion -->
             <!-- #region Employee Name -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Employee Name:</label><br />
+                <label style="text-align:right">Employee Name:</label><br />
                 <InputText class="form-control" @bind-Value="change.EmployeeName" />
             </div>
             <!-- #endregion -->
             <!-- #region Branch -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Region:</label><br />
+                <label style="text-align:right">Region:</label><br />
                 <InputSelect class="form-control" @bind-Value="change.Region">
-                    @foreach (string branch in form.Branchs)
+                    @foreach (Region branch in db.Regions)
                     {
-                        <option value="@branch">@branch</option>
+                        <option value="@branch.Name">@branch.</option>
                     }
                 </InputSelect>
             </div>
             <!-- #endregion -->
             <!-- #region Effective Date -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Effective Date:</label><br />
+                <label style="text-align:right">Effective Date:</label><br />
                 <InputDate class="form-control" @bind-Value="change.DateChangeRequired" />
             </div>
             <!-- #endregion -->
@@ -46,7 +46,7 @@
             @if (change.ChangeType == "Name Change")
             {
                 <div class="form-group">
-                    <label style="@form.LabelStyle">New Name:</label><br />
+                    <label style="text-align:right">New Name:</label><br />
                     <InputText class="form-control" @bind-Value="change.NewName" />
                 </div>
             }
@@ -55,11 +55,11 @@
             @if (change.ChangeType == "Job Title")
             {
                 <div class="form-group">
-                    <label style="@form.LabelStyle">New Title:</label><br />
+                    <label style="text-align:right">New Title:</label><br />
                     <InputSelect class="form-control" @bind-Value="change.JobTitle">
-                        @foreach (string title in form.JobTitles)
+                        @foreach (JobTitle title in db.JobTitles)
                             {
-                            <option value="@title">@title</option>
+                            <option value="@title.Name">@title.Name</option>
                             }                        
                     </InputSelect>
                 </div>
@@ -67,7 +67,7 @@
             <!-- #endregion -->
             <!-- #region Additional Details -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Additional Details:</label><br />
+                <label style="text-align:right">Additional Details:</label><br />
                 <InputTextArea class="form-control" @bind-Value="change.AdditionalDetails" />
             </div>
             <!-- #endregion -->
@@ -79,17 +79,14 @@
 
 @code {
     private EmployeeChange change = new EmployeeChange();
-    private GlobalForm form = new GlobalForm();
     private Email email = new Email();
 
-    protected override void OnAfterRender(bool firstRender)
+    protected void HandleValidSubmit()
     {
-        if (firstRender)
-        {
-        }
+        SendEmail();
     }
 
-    protected void HandleValidSubmit()
+    protected void SendEmail()
     {
         email.Subject = $"Employee Exit for {change.EmployeeName} for {change.DateChangeRequired}";
         email.From = "jeff.butler@carepartners.ca";

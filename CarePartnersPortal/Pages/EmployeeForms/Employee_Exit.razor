@@ -1,7 +1,7 @@
 ﻿@page "/Employee/Exit"
-@using CarePartnersPortal.Data
-@inject NavigationManager NavigationManager
 
+@inject NavigationManager NavigationManager
+@inject DBContext db
 <h3>Employee Exit</h3>
 
 <EditForm Model="@exit" OnValidSubmit="HandleValidSubmit">
@@ -10,7 +10,7 @@
         <div class="col-md-5">
             <!-- #region Exit Type -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Exit Type:</label><br />
+                <label style="text-align:right">Exit Type:</label><br />
                 <InputSelect class="form-control" @bind-Value="exit.ExitType">
                     @foreach (string type in exit.ExitTypes)
                     {
@@ -21,60 +21,60 @@
             <!-- #endregion -->
             <!-- #region Exit Date -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Exit Date:</label><br />
+                <label style="text-align:right">Exit Date:</label><br />
                 <InputDate class="form-control" @bind-Value="exit.ExitDate" />
             </div>
             <!-- #endregion -->
             <!-- #region Employee Name -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Employee Name:</label><br />
+                <label style="text-align:right">Employee Name:</label><br />
                 <InputText class="form-control" @bind-Value="exit.EmployeeName" />
             </div>
             <!-- #endregion -->
             <!-- #region Employee Number -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Employee Number:</label><br />
+                <label style="text-align:right">Employee Number:</label><br />
                 <InputText class="form-control" @bind-Value="exit.EmployeeNumber" />
             </div>
             <!-- #endregion -->
             <!-- #region Branch -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Region:</label><br />
+                <label style="text-align:right">Region:</label><br />
                 <InputSelect class="form-control" @bind-Value="exit.Region">
-                    @foreach (string branch in form.Branchs)
+                    @foreach (Branch branch in db.Branches)
                     {
-                        <option value="@branch">@branch</option>
+                        <option value="@branch.Name">@branch.Name</option>
                     }
                 </InputSelect>
             </div>
             <!-- #endregion -->
             <!-- #region Department -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Department:</label><br />
+                <label style="text-align:right">Department:</label><br />
                 <InputSelect class="form-control" @bind-Value="exit.Department">
-                    @foreach (string department in form.Departments)
+                    @foreach (Department department in db.Departments)
                     {
-                        <option value="@department">@department</option>
+                        <option value="@department.Name">@department.Name</option>
                     }
                 </InputSelect>
             </div>
             <!-- #endregion -->
             <!-- #region Job Title -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Job Title:</label><br />
+                <label style="text-align:right">Job Title:</label><br />
                 <InputSelect class="form-control" @bind-Value="exit.JobTitle">
-                    @foreach (string jobTitle in form.JobTitles)
+                    @foreach (JobTitle jobTitle in db.JobTitles)
                     {
-                        <option value="@jobTitle">@jobTitle</option>
+                        <option value="@jobTitle.Name">@jobTitle.Name</option>
                     }
                 </InputSelect>
             </div>
             <!-- #endregion -->
             <!-- #region Hardware Returned -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Hardware Returned:</label><br />
+                <label style="text-align:right">Hardware Returned:</label><br />
                 <InputSelect class="form-control" @bind-Value="exit.HardwareReturned">
-                    @foreach (string yesNo in form.YesNo)
+                    @foreach (string yesNo in GlobalForm.YesNoList())
                     {
                         <option value="@yesNo">@yesNo</option>
                     }
@@ -83,7 +83,7 @@
             <!-- #endregion -->
             <!-- #region Hardware Comments -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Hardware Comments:</label><br />
+                <label style="text-align:right">Hardware Comments:</label><br />
                 @if (exit.HardwareReturned == "Yes")
                 {
                     <label style="color:red">Please provide details on what hardware was returned. Include SIM IMEI S/N if relevant.</label>
@@ -100,9 +100,9 @@
         <div class="col-md-5">
             <!-- #region Set Out of Office-->
             <div class="form-group">
-                <label style="@form.LabelStyle">Set Out of Office Required:</label><br />
+                <label style="text-align:right">Set Out of Office Required:</label><br />
                 <InputSelect class="form-control" @bind-Value="exit.SetOutOfOffice">
-                    @foreach (string yesNo in form.YesNo)
+                    @foreach (string yesNo in  yesNoList)
                     {
                         <option value="@yesNo">@yesNo</option>
                     }
@@ -112,7 +112,7 @@
             @if (exit.SetOutOfOffice == "Yes")
             {
                 <div class="form-group">
-                    <label style="@form.LabelStyle">Set Out of Office To:</label><br />
+                    <label style="text-align:right">Set Out of Office To:</label><br />
                     <InputText class="form-control" @bind-Value="exit.SetOutOfOfficeTo" />
                 </div>
             }
@@ -120,9 +120,9 @@
             <!-- #endregion -->
             <!-- #region Email Forwarding -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Email Forwarding Required:</label><br />
+                <label style="text-align:right">Email Forwarding Required:</label><br />
                 <InputSelect class="form-control" @bind-Value="exit.ForwardEmail">
-                    @foreach (string yesNo in form.YesNo)
+                    @foreach (string yesNo in yesNoList)
                     {
                         <option value="@yesNo">@yesNo</option>
                     }
@@ -132,7 +132,7 @@
             @if (exit.ForwardEmail == "Yes")
             {
                 <div class="form-group">
-                    <label style="@form.LabelStyle">Forward Email To:</label><br />
+                    <label style="text-align:right">Forward Email To:</label><br />
                     <InputText class="form-control" @bind-Value="exit.ForwardEmailTo" />
                 </div>
             }
@@ -140,9 +140,9 @@
             <!-- #endregion -->
             <!-- #region Email Access-->
             <div class="form-group">
-                <label style="@form.LabelStyle">Access To Email Required:</label><br />
+                <label style="text-align:right">Access To Email Required:</label><br />
                 <InputSelect class="form-control" @bind-Value="exit.AccessToEmail">
-                    @foreach (string yesNo in form.YesNo)
+                    @foreach (string yesNo in yesNoList)
                     {
                         <option value="@yesNo">@yesNo</option>
                     }
@@ -152,7 +152,7 @@
             @if (exit.AccessToEmail == "Yes")
             {
                 <div class="form-group">
-                    <label style="@form.LabelStyle">Provide Email Access To:</label><br />
+                    <label style="text-align:right">Provide Email Access To:</label><br />
                     <InputText class="form-control" @bind-Value="exit.AccessToEmailFor" />
                 </div>
             }
@@ -160,9 +160,9 @@
             <!-- #endregion -->
             <!-- #region Set Out of Office-->
             <div class="form-group">
-                <label style="@form.LabelStyle">Access to Stored Files Required:</label><br />
+                <label style="text-align:right">Access to Stored Files Required:</label><br />
                 <InputSelect class="form-control" @bind-Value="exit.AccessToStoredFiles">
-                    @foreach (string yesNo in form.YesNo)
+                    @foreach (string yesNo in yesNoList)
                     {
                         <option value="@yesNo">@yesNo</option>
                     }
@@ -172,7 +172,7 @@
             @if (exit.AccessToStoredFiles == "Yes")
             {
                 <div class="form-group">
-                    <label style="@form.LabelStyle">Give Access to Stored Files To:</label><br />
+                    <label style="text-align:right">Give Access to Stored Files To:</label><br />
                     <InputText class="form-control" @bind-Value="exit.AccessToStoredFilesFor" />
                 </div>
             }
@@ -180,7 +180,7 @@
             <!-- #endregion -->
             <!-- #region Additional Details -->
             <div class="form-group">
-                <label style="@form.LabelStyle">Additional Details:</label><br />
+                <label style="text-align:right">Additional Details:</label><br />
                 <InputTextArea class="form-control" @bind-Value="exit.AdditionalDetails" />
             </div>
             <!-- #endregion -->
@@ -192,8 +192,8 @@
 
 @code {
     private EmployeeExit exit = new EmployeeExit();
-    private GlobalForm form = new GlobalForm();
     private Email email = new Email();
+    private List<string> yesNoList = GlobalForm.YesNoList();
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -204,11 +204,15 @@
 
     protected void HandleValidSubmit()
     {
-        #region Email
+        SendEmail();
+    }
+
+    protected void SendEmail()
+    {
         email.Subject = $"Employee Exit for {exit.EmployeeName} for {exit.ExitDate}";
         email.From = "jeff.butler@carepartners.ca";
         email.To = "supoort@carepartners.ca";
-        if (exit.ForwardEmail == "Yes" || exit.SetOutOfOffice == "Yes"|| exit.AccessToEmail == "Yes"|| exit.AccessToStoredFiles == "Yes")
+        if (exit.ForwardEmail == "Yes" || exit.SetOutOfOffice == "Yes" || exit.AccessToEmail == "Yes" || exit.AccessToStoredFiles == "Yes")
         {
             email.CC = "hassan.asif@carepartners.ca";
         }
@@ -240,7 +244,6 @@
             email.Body += $"Profide Access to Stored Files to: {exit.AccessToStoredFilesFor}\r\n";
         }
 
-        #endregion
 
         try
         {
