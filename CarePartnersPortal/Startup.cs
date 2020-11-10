@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CarePartnersPortal
 {
     public class Startup
@@ -34,6 +35,7 @@ namespace CarePartnersPortal
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
                 .AddAzureAD(options => Configuration.Bind("AzureAd", options));
             services.AddDbContext<DBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DBContextProcura>(options => options.UseSqlServer(Configuration.GetConnectionString("Procura")));
             services.AddControllersWithViews(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -46,6 +48,7 @@ namespace CarePartnersPortal
             });
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddScoped<ProcuraService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

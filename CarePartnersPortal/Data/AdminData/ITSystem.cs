@@ -14,6 +14,5 @@ namespace CarePartnersPortal
         public string ContactsInternal { get; set; }
         public string ContactsExternal { get; set; }
         public string NotificationGroup { get; set; }
-        public bool Impacted { get; set; } = false;
     }
 }

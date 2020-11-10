@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace CarePartnersPortal
 {
     public class EmployeeHire
-    {   
+    {
+        [Key]
+        public int ID { get; set; }
         [Required, Display(Name = "Start Date")]
         public DateTime? StartDate { get; set; }
         [Required]

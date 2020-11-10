@@ -1,39 +1,56 @@
 ﻿@page "/outagenotification"
-<h3>placeholder</h3>
+<h3>IT Outage</h3>
 @inject DBContext db
 <EditForm Model="outage" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
-    <div class="form-group">
-        @*@foreach(var item in itSystems)
-        {
-            <div>
-                <InputCheckbox @bind-Value="item.Impacted"></InputCheckbox>
+    <br />
+    <h4 style="text-align:center">Select Impacted Systems</h4>
+    <div class="container">
+        <div class="row">
+            <div class="col" style="background-color:lightgreen">
+                <p style="text-align:center">Systems List</p>
+                @foreach (ITSystem system in itSystems)
+                {
+                    <button class="btn btn-primary" @onclick="() => AddImpactedSystem(system)">@system.Name</button>
+                }
             </div>
-        }*@
-        <table class="table">
-            @for (int i = 0; i < (itSystems.Count / 4) +1 ; i++)
-            {
-                <tr>
-                    @for (int j = 0; j <= 5; j++)
-                    {
-                        if (count == itSystems.Count)
-                        {
-                            break;
-                        }
-                        else {
-                            <td>
-
-                                <InputCheckbox @bind-Value="itSystems[count].Impacted">@itSystems[count].Name</InputCheckbox>
-                                @{count++; }
-                            </td>
-                        }
-
-                    }
-                </tr>
-            }
-        </table>
+            <div class="col">
+            </div>
+            <div class="col" style="background-color:indianred">
+                <p style="text-align:center">Impacted Systems List</p>
+                @foreach (ITSystem system in itSystemsImpacted)
+                {
+                    <button class="btn btn-primary" @onclick="() => RemoveImpactedSystem(system)">@system.Name</button>
+                }
+            </div>
+        </div>
     </div>
-    @*<div class="form-group">
+    <br />
+
+    <h4 style="text-align:center">Select Impacted Users</h4>
+    <div class="container">
+        <div class="row">
+            <div class="col" style="background-color:lightgreen">
+                <p style="text-align:center">User Groups</p>
+                @foreach (string group in userGroups)
+                {
+                    <button class="btn btn-primary" @onclick="() => AddImpactedUsers(group)">@group</button>
+                }
+            </div>
+            <div class="col">
+            </div>
+            <div class="col" style="background-color:indianred">
+                <p style="text-align:center">Impacted Users</p>
+                @foreach (string group in impactedUserGroups)
+                {
+                    <button class="btn btn-primary" @onclick="() => RemoveImpactedUsers(group)">@group</button>
+                }
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group">
         <label style="text-align:right">Outage Type:</label><br />
         <InputSelect class="form-control" @bind-Value="outage.IncidentType">
             <option value="Scheduled Maintenance">Scheduled Maintenance</option>,
@@ -43,34 +60,40 @@
 
     <div class="form-group">
         <label style="text-align:right">Start:</label><br />
-        <InputDate class="form-control" @bind-Value="outage.OutageStart" />
+        <InputText class="form-control" @bind-Value="outage.OutageStart" />
     </div>
 
     <div class="form-group">
         <label style="text-align:right">End:</label><br />
-        <InputDate class="form-control" @bind-Value="outage.OutageEnd" />
+        <InputText class="form-control" @bind-Value="outage.OutageEnd" />
     </div>
 
     <div class="form-group">
         <label style="text-align:right">Details:</label><br />
         <InputTextArea class="form-control" @bind-Value="outage.Details" />
-    </div>*@
+    </div>
 
 
 </EditForm>
 
 @code {
-    private int count;
     ITOutage outage = new ITOutage();
     Email notification = new Email();
     List<ITSystem> itSystems = new List<ITSystem>();
-    ITSystem sys = new ITSystem();
+    List<ITSystem> itSystemsImpacted = new List<ITSystem>();
+    List<string> userGroups = new List<string>();
+    List<string> impactedUserGroups = new List<string>();
+
     private bool test = false;
     protected override void OnInitialized()
     {
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 26; i++)
         {
-            itSystems.Add(new ITSystem() { Name = i.ToString() });
+            itSystems.Add(new ITSystem() { Name = i.ToString() + " System" });
+        }
+        for (int i = 0; i < 16; i++)
+        {
+            userGroups.Add(i.ToString() + " User Group");
         }
         GetInfoFromDB();
     }
@@ -87,6 +110,30 @@
     protected void GetInfoFromDB()
     {
         //itSystems = db.ITSystems.ToList();
+        //userGroups = 
+    }
+    protected void AddImpactedSystem(ITSystem system)
+    {
+        itSystems.Remove(system);
+        itSystemsImpacted.Add(system);
+    }
+
+    protected void RemoveImpactedSystem(ITSystem system)
+    {
+        itSystems.Add(system);
+        itSystemsImpacted.Remove(system);
+    }
+
+    protected void AddImpactedUsers(string group)
+    {
+        userGroups.Remove(group);
+        impactedUserGroups.Add(group);
+    }
+
+    protected void RemoveImpactedUsers(string group)
+    {
+        userGroups.Add(group);
+        impactedUserGroups.Remove(group);
     }
 
 }
