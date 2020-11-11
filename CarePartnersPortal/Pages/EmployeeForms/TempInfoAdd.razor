@@ -1,0 +1,46 @@
+﻿@page "/Admin/TempInfo/Add"
+<h3>TempInfoAdd</h3>
+@inject DBContext db
+@inject NavigationManager nav
+<EditForm Model="@tempInfo">
+    <table class="table">
+        <thread>
+            <tr style="text-align:center">
+                <th>System</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Access</th>
+            </tr>
+            <tr>
+                <td><InputText class="form-control" @bind-Value="@tempInfo.System" /></td>
+                <td><InputText class="form-control" @bind-Value="@tempInfo.UserName" /></td>
+                <td><InputText class="form-control" @bind-Value="@tempInfo.Password" /></td>
+                <td><InputText class="form-control" @bind-Value="@tempInfo.Access" /></td>
+                <td><button class="btn btn-primary btn-sm" @onclick="e => AddPW(tempInfo)">Add</button></td>
+            </tr>
+        </thread>
+    </table>    
+</EditForm>
+
+    @code {
+        TempInfo tempInfo = new TempInfo();
+        [Parameter]
+        public string ID { get; set; }
+
+        protected override void OnInitialized()
+        {            
+            tempInfo.DateTimeCreated = DateTime.Now;
+            tempInfo.DateTimeExpiry = tempInfo.DateTimeCreated.AddDays(5);
+        }
+
+        protected void AddPW(TempInfo tempInfo)
+        {
+            tempInfo.Password = EncryptionService.EncodeString(tempInfo.Password);
+            tempInfo.System = EncryptionService.EncodeString(tempInfo.System);
+            tempInfo.Code = EncryptionService.EncodeString(tempInfo.Code);
+            tempInfo.UserName = EncryptionService.EncodeString(tempInfo.UserName);
+            db.TempInfos.Add(tempInfo);
+            db.SaveChanges();
+            nav.NavigateTo("/admin/TempInfo", true);
+        }
+    }

@@ -2,7 +2,7 @@
 <h3>Active Users</h3>
 
 
-@inject ADService adService
+
 
 <select @onchange="DoStuff">
     @foreach (var location in locatons)
@@ -53,7 +53,7 @@
 
     protected void GetUers()
     {
-        users = adService.GetActiveUsers();
+        users = ADService.GetActiveUsers();
         StateHasChanged();
     }
 

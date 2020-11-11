@@ -1,0 +1,58 @@
+﻿@page "/Admin/TempInfo/Edit/{ID}"
+<h3>Edit User Info</h3>
+@inject DBContext db
+@inject NavigationManager nav
+<EditForm Model="@tempInfo">
+    <table class="table">
+        <thread>
+            <tr style="text-align:center">
+                <th>System</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Access</th>
+                <th>Expiry</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td><InputText class="form-control" @bind-Value="@tempInfo.System" /></td>
+                <td><InputText class="form-control" @bind-Value="@tempInfo.UserName" /></td>
+                <td><InputText class="form-control" @bind-Value="@tempInfo.Password" /></td>
+                <td><InputText class="form-control" @bind-Value="tempInfo.Access" /></td>
+<td>@tempInfo.DateTimeExpiry</td>
+                <td><button class="btn btn-primary btn-sm" @onclick="e => UpdatePW(tempInfo)">Update</button> <button class="btn btn-primary btn-sm" @onclick="@(e => DeletePW(tempInfo))">Delete</button></td>
+            </tr>
+        </thread>
+    </table>
+</EditForm>
+@code {
+    TempInfo tempInfo = new TempInfo();
+    [Parameter]
+    public string ID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        tempInfo = db.TempInfos.Where(x => x.ID == Convert.ToInt32(ID)).FirstOrDefault();
+        tempInfo.System = EncryptionService.DecodeString(tempInfo.System);
+        tempInfo.UserName = EncryptionService.DecodeString(tempInfo.UserName);
+        tempInfo.Password = EncryptionService.DecodeString(tempInfo.Password);
+
+    }
+
+    protected void UpdatePW(TempInfo tempInfo)
+    {
+        tempInfo.System = EncryptionService.EncodeString(tempInfo.System);
+        tempInfo.UserName = EncryptionService.EncodeString(tempInfo.UserName);
+        tempInfo.Password = EncryptionService.EncodeString(tempInfo.Password);
+
+        db.Update(tempInfo);
+        db.SaveChanges();
+        nav.NavigateTo("/Admin/TempInfo",true);
+    }
+
+    protected void DeletePW(TempInfo tempInfo)
+    {
+        db.TempInfos.Remove(tempInfo);
+        db.SaveChanges();
+        nav.NavigateTo("/Admin/TempInfo", true);
+    }
+}

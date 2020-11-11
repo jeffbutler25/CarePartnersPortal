@@ -1,0 +1,55 @@
+﻿@page "/TempInfoGet"
+<h3>Temp User Info</h3>
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject DBContext db
+@using System.Security.Claims
+
+
+<table class="table">
+    <thread>
+        <tr style="text-align:center">
+            <th>System</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Expiry</th>
+        </tr>
+        @foreach (TempInfo info in infoList)
+        {
+            <tr style="text-align:center">
+                <td>@info.System</td>
+                <td>@info.UserName</td>
+                <td>@info.Password</td>
+                <td>@info.DateTimeExpiry</td>
+            </tr>
+        }
+    </thread>
+</table>
+
+@code {
+    private GlobalForm form = new GlobalForm();
+    private List<TempInfo> infoList;
+    private string currentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCurrentUser();
+        GetInfoFromDB();
+    }
+
+    protected void GetInfoFromDB()
+    {
+        infoList = db.TempInfos.Where(x => x.Access.Contains(currentUser)).ToList();
+        foreach(TempInfo info in infoList)
+        {
+            info.Code = EncryptionService.DecodeString(info.Code);
+            info.System = EncryptionService.DecodeString(info.System);
+            info.UserName = EncryptionService.DecodeString(info.UserName);
+            info.Password = EncryptionService.DecodeString(info.Password);
+        }
+    }
+
+    private async Task GetCurrentUser()
+    {
+        currentUser = ADService.GetCurrentUser(await AuthenticationStateProvider.GetAuthenticationStateAsync()).ToLower();
+    }
+}

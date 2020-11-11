@@ -61,8 +61,5 @@ namespace CarePartnersPortal
             }
             return password;
         }
-
-
-
     }    
 }

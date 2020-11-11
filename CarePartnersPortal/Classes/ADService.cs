@@ -13,7 +13,7 @@ namespace CarePartnersPortal
     {
         private static readonly DirectoryEntry directoryOperationsEntry = new DirectoryEntry("LDAP://ou=operations,ou=cp,DC=carepartners,DC=local");
          
-        public List<ADUser> GetActiveUsers()
+        public static List<ADUser> GetActiveUsers()
         {
             List<ADUser> users = new List<ADUser>();
             PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "Carepartners", "OU=cp,dc=carepartners,dc=local");
@@ -27,7 +27,7 @@ namespace CarePartnersPortal
             return users; 
         }
 
-        public List<string> GetOperationsUserOUs()
+        public static List<string> GetOperationsUserOUs()
         {
             Dictionary<string,List<string>> results = new Dictionary<string,List<string>>();
             List<string> res = new List<string>();
@@ -65,14 +65,29 @@ namespace CarePartnersPortal
                 }
             }
         }
+
+        public static SearchResult FindAccountByEmail(string email)
+        {
+            string filter = string.Format("(proxyaddresses=smtp:{0})", email);
+
+            using (DirectoryEntry gc = new DirectoryEntry("LDAP://DC=carepartners,DC=local"))
+            { 
+                using (DirectorySearcher searcher = new DirectorySearcher(gc, filter, new string[] { "proxyAddresses", "userprincipalname", "displayName" }))
+                {
+                    searcher.ReferralChasing = ReferralChasingOption.All;
+                    SearchResult result = searcher.FindOne();
+                    string email2 = result.Properties[1].Values.ToString();
+                    return result;
+                }
+            }
+        }
+
         public static string GetCurrentUser(AuthenticationState userState)
         {
 
             if (userState.User.Identity.IsAuthenticated)
             {
-
-                return userState.User.Identity.Name.Substring(13).ToString();
-
+                return userState.User.Identity.Name.ToString();
             }
             else
             {

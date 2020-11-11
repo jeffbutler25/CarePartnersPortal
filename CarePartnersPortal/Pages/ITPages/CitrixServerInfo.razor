@@ -1,0 +1,42 @@
+﻿@page "/CitrixServerInfo"
+<h3>CitrixServerInfo</h3>
+@foreach(float pct in pcts)
+{
+    <p>@pct</p>
+}
+@code {
+    private float space;
+
+    List<string> servers = new List<string>()
+    {
+        "wv-cp-xausr21p",
+        "wv-cp-xausr22p",
+        "wv-cp-xausr23p",
+        "wv-cp-xausr24p",
+        "wv-cp-xausr25p",
+        "wv-cp-xausr26p",
+        "wv-cp-xausr27p",
+        "wv-cp-xausr28p",
+        "wv-cp-xausr29p",
+        "wv-cp-xausr30p",
+        "wv-cp-xausr31p",
+        "wv-cp-xausr32p",
+        "wv-cp-xausr33p",
+        "wv-cp-xausr34p",
+        "wv-cp-xausr35p",
+        "wv-cp-xausr36p",
+        "wv-cp-xausr37p",
+        "wv-cp-xausr38p",
+        "wv-cp-xausr39p",
+        "wv-cp-xausr40p",
+    };
+    List<float> pcts = new List<float>();
+
+
+    protected override void OnInitialized( )
+    {
+        foreach (string server in servers) {
+            pcts.Add(ServerInfoService.DriveSpace(server));
+        }
+    }
+}

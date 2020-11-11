@@ -28,11 +28,9 @@ else
             </tr>
             @foreach (ProcuraFile file in procuraFiles)
             {
-                <tr>
-
+                <tr>                    
                     <td>@file.File_Name</td>
                     <td>@file.File_Path</td>
-
                     <td>@file.ZIP_File_Image</td>
                 </tr>
             }
@@ -53,6 +51,7 @@ else
 
     protected void GetInfoFromDB()
     {
+        ADService.FindAccountByEmail("201133@carepartners.ca");
         procuraFiles = db.ProcuraFiles.ToList();
     }
 
@@ -131,7 +130,7 @@ else
     protected async Task Update()
     {
         var task = Task.Run(() => Uploadxlsx());
-        var task2 = Task.Run(() => Update2());
+        //var task2 = Task.Run(() => Update2());
         processing = true;
 
         await task;

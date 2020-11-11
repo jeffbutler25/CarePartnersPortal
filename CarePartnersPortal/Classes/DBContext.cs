@@ -15,7 +15,7 @@ namespace CarePartnersPortal
         public DbSet<Branch> Branches { get; set; }
         public DbSet<ITEquipmentOrder> ITEquipmentOrders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<TempPW> TempPWs { get; set; }
+        public DbSet<TempInfo> TempInfos { get; set; }
         public DbSet<ITSystem> ITSystems { get; set; }
         public DbSet<EmployeeHire> EmployeeHires { get; set; }
         public DbSet<HireType> HireTypes { get; set; }

@@ -1,7 +1,7 @@
 ﻿@page "/adtools"
 <h3>Component</h3>
-@using CarePartnersPortal.Data
-@inject ADService adService
+
+
 
 @foreach(var ou in ous)
 {
@@ -14,7 +14,7 @@
     {
         if (firstRender)
         {
-            ous = adService.GetOperationsUserOUs();
+            ous = ADService.GetOperationsUserOUs();
             StateHasChanged();
         }
     }

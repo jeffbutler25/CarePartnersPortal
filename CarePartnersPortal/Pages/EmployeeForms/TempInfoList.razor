@@ -1,0 +1,57 @@
+﻿@page "/Admin/TempInfo"
+@layout MainLayoutAdmin
+@inject DBContext db
+@inject NavigationManager nav
+<h3>Temp Info List</h3>
+<button class="" @onclick="AddInfo">Add</button>
+<EditForm Model="@tempInfo">
+    <InputText @bind-Value="@searchcode" @onkeypress="FilterList"></InputText>
+    <table class="table">
+        <thread>
+            <tr style="text-align:center">
+                <th>System</th>
+                <th>Username</th>
+                <th>Action</th>
+            </tr>
+            @foreach (TempInfo tempInfo in tempInfoList)
+            {
+                <tr>
+                    <td>@EncryptionService.DecodeString(tempInfo.System)</td>
+                    <td>@EncryptionService.DecodeString(tempInfo.UserName)</td>
+                    <td><button class="btn btn-primary btn-sm" @onclick="e => EditInfo(tempInfo)">Edit</button></td>
+                </tr>
+            }
+        </thread>
+    </table>
+</EditForm>
+
+@code {
+    private TempInfo tempInfo = new TempInfo();
+    private GlobalForm form = new GlobalForm();
+    private List<TempInfo> tempInfoList;
+    private string searchcode;
+    protected override void OnInitialized()
+    {
+        GetInfoFromDB();
+    }
+
+    protected void GetInfoFromDB()
+    {
+        tempInfoList = db.TempInfos.OrderBy(x => x.Code).ToList();
+    }
+
+    protected void EditInfo(TempInfo pw)
+    {
+        nav.NavigateTo($"/Admin/TempInfo/Edit/{pw.ID}", true);
+    }
+
+    protected void AddInfo()
+    {
+        nav.NavigateTo($"/Admin/TempInfo/Add/", true);
+    }
+
+    protected void FilterList()
+    {
+        tempInfoList = tempInfoList.FindAll(x => x.Code == searchcode);
+    }
+}

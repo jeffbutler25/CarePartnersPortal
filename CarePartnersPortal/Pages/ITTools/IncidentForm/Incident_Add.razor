@@ -5,22 +5,22 @@
     <DataAnnotationsValidator />
     <br />
     <h4 style="text-align:center">Select Impacted Systems</h4>
-    <div class="container">
+    <div class="container" style="outline: double">
         <div class="row">
-            <div class="col" style="background-color:lightgreen">
+            <div class="col" style="outline: double">
                 <p style="text-align:center">Systems List</p>
                 @foreach (ITSystem system in itSystems)
                 {
-                    <button class="btn btn-primary" @onclick="() => AddImpactedSystem(system)">@system.Name</button>
+                    <button class="" @onclick="() => AddImpactedSystem(system)">@system.Name</button>
                 }
             </div>
             <div class="col">
             </div>
-            <div class="col" style="background-color:indianred">
+            <div class="col" style="outline: double">
                 <p style="text-align:center">Impacted Systems List</p>
                 @foreach (ITSystem system in itSystemsImpacted)
                 {
-                    <button class="btn btn-primary" @onclick="() => RemoveImpactedSystem(system)">@system.Name</button>
+                    <button class="" @onclick="() => RemoveImpactedSystem(system)">@system.Name</button>
                 }
             </div>
         </div>
@@ -28,13 +28,13 @@
     <br />
 
     <h4 style="text-align:center">Select Impacted Users</h4>
-    <div class="container">
+    <div class="container"  style="outline: double">
         <div class="row">
             <div class="col" style="background-color:lightgreen">
                 <p style="text-align:center">User Groups</p>
                 @foreach (string group in userGroups)
                 {
-                    <button class="btn btn-primary" @onclick="() => AddImpactedUsers(group)">@group</button>
+                    <button class="" @onclick="() => AddImpactedUsers(group)">@group</button>
                 }
             </div>
             <div class="col">
@@ -43,7 +43,7 @@
                 <p style="text-align:center">Impacted Users</p>
                 @foreach (string group in impactedUserGroups)
                 {
-                    <button class="btn btn-primary" @onclick="() => RemoveImpactedUsers(group)">@group</button>
+                    <button class="" @onclick="() => RemoveImpactedUsers(group)">@group</button>
                 }
             </div>
         </div>

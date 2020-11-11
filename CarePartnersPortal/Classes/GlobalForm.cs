@@ -14,11 +14,7 @@ namespace CarePartnersPortal
                 "",
                 "Yes",
                 "No"
-            }; ;
-
+            };
         }
-
     }
-
-
 }
