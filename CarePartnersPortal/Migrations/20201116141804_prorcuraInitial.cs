@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarePartnersPortal.Migrations
 {
-    public partial class initial : Migration
+    public partial class prorcuraInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,9 +20,9 @@ namespace CarePartnersPortal.Migrations
                     File_Type = table.Column<string>(nullable: true),
                     DEF_SUBJECT = table.Column<string>(nullable: true),
                     File_Path = table.Column<string>(nullable: true),
-                    ZIP_File_Size = table.Column<int>(nullable: false),
+                    ZIP_File_Size = table.Column<long>(nullable: false),
                     ZIP_File_Image = table.Column<byte[]>(nullable: true),
-                    File_Size = table.Column<int>(nullable: false)
+                    File_Size = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,0 +1,151 @@
+﻿@page "/procura"
+@attribute [Authorize(Policy = "Admin")]
+@inject DBContextProcura db
+@inject ProcuraService procuraService
+@inject NavigationManager nav
+@using Microsoft.EntityFrameworkCore
+@using System.IO
+@using System.IO.Compression
+@using OfficeOpenXml
+@using System.Threading
+
+<button @onclick="Update">Uploadxlsx</button>
+<button @onclick="ProcessFiles">ProcessFiles</button>
+<button @onclick="EmptyDB">EmptyDB</button>
+
+@if (processing)
+{
+    <p>Loading ...</p>
+}
+
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>File Path</th>
+                <th>File Size</th>
+                <th>Zip Size</th>
+            </tr>
+            @foreach (ProcuraFile file in procuraFiles)
+            {
+                <tr>
+                    <td>@file.File_Name</td>
+                    <td>@file.File_Path</td>
+                    <td>@file.File_Size</td>
+                    <td>@file.ZIP_File_Size</td>
+                </tr>
+            }
+        </thead>
+    </table>
+}
+
+@code{
+    private List<ProcuraFile> procuraFiles;
+    string path = @"c:\it\filedb.xlsx";
+    private bool processing = false;
+    private int count;
+
+    protected override void OnInitialized()
+    {
+        GetInfoFromDB();
+    }
+
+    protected void GetInfoFromDB()
+    {
+        ADService.FindAccountByEmail("201133@carepartners.ca");
+        procuraFiles = db.ProcuraFiles.ToList();
+    }
+
+    protected void ProcessFiles()
+    {
+        processing = true;
+        foreach (ProcuraFile file in procuraFiles)
+        {
+
+            var zipFile = @"C:\temp\" + file.File_Name + ".zip";
+            string filepath = file.File_Path + "\\" + file.File_Name;
+            if (File.Exists(zipFile)) ;
+            {
+                File.Delete(zipFile);
+            }
+            if (File.Exists(Path.Combine(filepath)))
+            {
+                using (var archive = ZipFile.Open(zipFile, ZipArchiveMode.Create))
+                {
+                }
+                using (FileStream zipToOpen = new FileStream(zipFile, FileMode.Open))
+                {
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                    {
+                        ZipArchiveEntry readmeEntry = archive.CreateEntryFromFile(filepath, file.File_Name);
+                    }
+                }
+
+                FileInfo fileInfo = new FileInfo(filepath);
+                FileInfo zipInfo = new FileInfo(zipFile);
+
+                file.File_Size = fileInfo.Length;
+                file.File_Date = fileInfo.CreationTime;
+                file.ZIP_File_Size = zipInfo.Length;
+                file.ZIP_File_Image = File.ReadAllBytes(zipFile);
+            }
+        }
+        processing = false;
+    }
+
+    protected void EmptyDB()
+    {
+        db.Database.ExecuteSqlInterpolated($@"TRUNCATE TABLE [ProcuraFiles]");
+        nav.NavigateTo("/", true);
+    }
+
+    protected void Uploadxlsx()
+    {
+
+        FileInfo fileInfo = new FileInfo(path);
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        using (ExcelPackage excelPackage = new ExcelPackage(fileInfo))
+        {
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
+            int totalCollumn = worksheet.Dimension.End.Column;
+            int totalRow = worksheet.Dimension.End.Row;
+
+            for (int row = 2; row < totalRow; row++)
+            {
+                var file = new ProcuraFile();
+                file.Source_DB_Name = worksheet.Cells[row, 1].Value.ToString();
+                file.client_number = Convert.ToUInt64(worksheet.Cells[row, 2].Value.ToString());
+                file.File_Name = worksheet.Cells[row, 3].Value.ToString();
+                file.File_Type = worksheet.Cells[row, 5].Value.ToString();
+                file.DEF_SUBJECT = worksheet.Cells[row, 6].Value.ToString();
+                file.File_Path = worksheet.Cells[row, 7].Value.ToString();
+                db.ProcuraFiles.Add(file);
+                db.SaveChanges();
+            }
+        }
+        procuraFiles = db.ProcuraFiles.ToList();
+
+        processing = false;
+    }
+
+    protected async Task Update()
+    {
+        var task = Task.Run(() => Uploadxlsx());
+        var task2 = Task.Run(() => Update2());
+        processing = true;
+
+        await task;
+    }
+
+    protected void Update2()
+    {
+        while (processing)
+        {
+            count = db.ProcuraFiles.Count();
+            Thread.Sleep(500);
+            Update2();
+        }
+    }
+}

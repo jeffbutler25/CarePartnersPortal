@@ -35,6 +35,9 @@ namespace CarePartnersPortal.Migrations.DB
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Region")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ID");
 
                     b.HasIndex("ITEquipmentOrderID");

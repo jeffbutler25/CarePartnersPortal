@@ -3,12 +3,18 @@
 @layout MainLayoutAdmin
 @inject DBContext db
 @inject NavigationManager nav
+
+@attribute [Authorize(Policy = "Admin")]
+
 <h3>Branches</h3>
+
 <EditForm Model="@branch">
     <table class="table">
         <thread>
             <tr style="text-align:center">
-                <th>Department</th>
+                <th>Branch</th>
+                <th>Region</th>
+                <th>Approver</th>
                 <th>Action</th>
             </tr>
             @foreach (Branch branch in branches)
@@ -16,7 +22,15 @@
                 if (Task == "edit" && branch.ID == Int32.Parse(ID))
                 {
                     <tr>
-                        <InputText class="form-control" @bind-Value="branch.Name" />
+                        <td><InputText class="form-control" @bind-Value="branch.Name" /></td>
+                        <td><InputSelect class="form-control" @bind-Value="branch.Region">
+                            <option value=""></option>
+                            @foreach (Region region in regions)
+                            {
+                                <option value="@region.Name">@region.Name</option>
+                            }
+                        </InputSelect></td>
+                        <td><InputText class="form-control" @bind-Value="branch.Approvers" /></td>
                         <td><button class="btn btn-primary btn-sm" @onclick="e => UpdateBranch(branch)">Update</button> <button class="btn btn-primary btn-sm" @onclick="@(e => DeleteBranch(branch))">Delete</button></td>
                     </tr>
                 }
@@ -24,6 +38,8 @@
                 {
                     <tr>
                         <td>@branch.Name</td>
+                        <td>@branch.Region</td>
+                        <td>@branch.Approvers</td>
                         <td><button class="btn btn-primary btn-sm" @onclick="e => EditBranch(branch)">Edit</button></td>
                     </tr>
                 }
@@ -32,17 +48,27 @@
             {
                 <tr>
                     <td><InputText class="form-control" @bind-Value="branch.Name" /></td>
+                    <td>
+                        <InputSelect class="form-control" @bind-Value="branch.Region">
+                            <option value=""></option>
+                            @foreach (Region region in regions)
+                                {
+                                <option value="@region.Name">@region.Name</option>
+                                }
+                        </InputSelect>
+                    </td>
+                    <td><InputText class="form-control" @bind-Value="branch.Approvers" /></td>
                     <td><button class="btn btn-primary btn-sm" @onclick="e => AddBranch(branch)">Add</button></td>
                 </tr>
             }
-            </thread>
+        </thread>
     </table>
 </EditForm>
 
 @code {
-    List<Branch> branches;
+    List<Branch> branches = new List<Branch>();
     private Branch branch = new Branch();
-
+    private List<Region> regions = new List<Region>();
     [Parameter]
     public string Task { get; set; }
     [Parameter]
@@ -56,6 +82,7 @@
     protected void GetInfoFromDB()
     {
         branches = db.Branches.OrderBy(branch => branch.Name).ToList();
+        regions = db.Regions.OrderBy(region => region.Name).ToList();
     }
 
     protected void AddBranch(Branch branch)

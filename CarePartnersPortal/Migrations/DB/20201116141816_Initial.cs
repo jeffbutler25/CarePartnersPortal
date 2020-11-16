@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarePartnersPortal.Migrations.DB
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -129,20 +129,22 @@ namespace CarePartnersPortal.Migrations.DB
                 });
 
             migrationBuilder.CreateTable(
-                name: "TempPWs",
+                name: "TempInfos",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<int>(nullable: false),
+                    Code = table.Column<string>(nullable: true),
                     Access = table.Column<string>(nullable: true),
+                    System = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     DateTimeCreated = table.Column<DateTime>(nullable: false),
                     DateTimeExpiry = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TempPWs", x => x.ID);
+                    table.PrimaryKey("PK_TempInfos", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -256,7 +258,7 @@ namespace CarePartnersPortal.Migrations.DB
                 name: "Regions");
 
             migrationBuilder.DropTable(
-                name: "TempPWs");
+                name: "TempInfos");
 
             migrationBuilder.DropTable(
                 name: "ITEquipmentOrders");

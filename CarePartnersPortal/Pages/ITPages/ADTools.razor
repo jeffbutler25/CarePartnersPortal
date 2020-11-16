@@ -1,9 +1,10 @@
 ﻿@page "/adtools"
+@attribute [Authorize(Policy = "Admin")]
 <h3>Component</h3>
 
 
 
-@foreach(var ou in ous)
+@foreach (var ou in ous)
 {
     <p>@ou</p>
 }

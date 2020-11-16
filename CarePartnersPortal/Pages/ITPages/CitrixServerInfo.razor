@@ -1,6 +1,7 @@
 ﻿@page "/CitrixServerInfo"
+@attribute [Authorize(Policy = "Admin")]
 <h3>CitrixServerInfo</h3>
-@foreach(float pct in pcts)
+@foreach (float pct in pcts)
 {
     <p>@pct</p>
 }
@@ -8,7 +9,7 @@
     private float space;
 
     List<string> servers = new List<string>()
-    {
+{
         "wv-cp-xausr21p",
         "wv-cp-xausr22p",
         "wv-cp-xausr23p",
@@ -33,9 +34,10 @@
     List<float> pcts = new List<float>();
 
 
-    protected override void OnInitialized( )
+    protected override void OnInitialized()
     {
-        foreach (string server in servers) {
+        foreach (string server in servers)
+        {
             pcts.Add(ServerInfoService.DriveSpace(server));
         }
     }

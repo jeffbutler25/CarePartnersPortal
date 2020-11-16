@@ -2,6 +2,7 @@
 @layout MainLayoutAdmin
 @inject DBContext db
 @inject NavigationManager nav
+@attribute [Authorize(Policy = "Admin")]
 <h3>Temp Info List</h3>
 <button class="" @onclick="AddInfo">Add</button>
 <EditForm Model="@tempInfo">

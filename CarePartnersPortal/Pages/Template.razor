@@ -1,0 +1,21 @@
+﻿@page "/Template"
+@inject DBContext db
+@inject NavigationManager nav
+
+
+@code{
+    private List<ProcuraFile> procuraFiles;
+    string path = @"c:\it\filedb.xlsx";
+    private bool processing = false;
+    private int count;
+
+    protected override void OnInitialized()
+    {
+        GetInfoFromDB();
+    }
+
+    protected void GetInfoFromDB()
+    {
+
+    }
+}

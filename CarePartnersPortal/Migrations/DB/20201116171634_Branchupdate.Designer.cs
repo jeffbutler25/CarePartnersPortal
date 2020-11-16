@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarePartnersPortal.Migrations.DB
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20201110155938_initialdbcontext")]
-    partial class initialdbcontext
+    [Migration("20201116171634_Branchupdate")]
+    partial class Branchupdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,9 @@ namespace CarePartnersPortal.Migrations.DB
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Region")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");

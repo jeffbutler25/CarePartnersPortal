@@ -3,7 +3,7 @@
 @layout MainLayoutAdmin
 @inject DBContext db
 @inject NavigationManager nav
-
+@attribute [Authorize(Policy = "Admin")]
 <h3>Region</h3>
 <EditForm Model="@region">
     <table class="table">
@@ -62,7 +62,7 @@
     protected override void OnInitialized()
     {
         GetInfoFromDB();
-        if(ID != null)
+        if (ID != null)
         {
             region = db.Regions.Single(x => x.ID == Int32.Parse(ID));
         }

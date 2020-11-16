@@ -1,8 +1,8 @@
 ﻿@page "/Admin/ITOrderItems"
 @layout MainLayoutAdmin
-@using CarePartnersPortal.Data
 @inject DBContext db
 @inject NavigationManager nav
+@attribute [Authorize(Policy = "Admin")]
 <h3>IT Order Items</h3>
 <EditForm Model="@orderItem">
     <table class="table">
@@ -13,19 +13,19 @@
                 <th>Price</th>
             </tr>
 
-                @foreach (OrderItem order in orderItems)
-                {
-                    <tr>
-                        <td>@order.Name</td>
-                        <td>@order.Description</td>
-                        <td>@order.Price</td>
-                        <td><button class="btn btn-primary" @onclick="Change">Edit</button> <button class="btn btn-primary" @onclick="@(e => DeleteFromDB(order))">Delete</button></td>
-                    </tr>
-                }
+            @foreach (OrderItem item in orderItems)
+            {
+                <tr>
+                    <td><InputText class="form-group" @bind-Value="item.Name" /></td>
+                    <td><InputTextArea class="form-group" @bind-Value="item.Description" /></td>
+                    <td><InputNumber class="form-group" @bind-Value="item.Price" /></td>
+                    <td><button class="btn btn-primary" @onclick="() => Change(item)">Edit</button> <button class="btn btn-primary" @onclick="@(e => DeleteFromDB(item))">Delete</button></td>
+                </tr>
+            }
 
             <tr>
                 <td><InputText class="form-control" @bind-Value="orderItem.Name" /></td>
-                <td><InputText class="form-control" @bind-Value="orderItem.Description" /></td>
+                <td><InputTextArea class="form-control" @bind-Value="orderItem.Description" /></td>
                 <td><InputNumber class="form-control" @bind-Value="orderItem.Price" /></td>
                 <td><button class="btn btn-primary" @onclick="AddToDB">Add</button></td>
             </tr>
@@ -35,7 +35,7 @@
 
 @code {
 
-    List<OrderItem> orderItems;
+    List<OrderItem> orderItems = new List<OrderItem>();
 
     private OrderItem orderItem = new OrderItem();
     private GlobalForm form = new GlobalForm();
@@ -64,9 +64,11 @@
         db.SaveChanges();
         nav.NavigateTo("/admin/ITOrderItems", true);
     }
-    protected void Change()
-    {
 
+    protected void Change(OrderItem item)
+    {
+        db.OrderItems.Update(item);
+        db.SaveChanges();
         nav.NavigateTo("/admin/ITOrderItems", true);
     }
 }

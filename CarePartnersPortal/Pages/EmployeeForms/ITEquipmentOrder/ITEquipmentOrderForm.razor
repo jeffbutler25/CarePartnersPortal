@@ -19,6 +19,7 @@
             <div class="form-group">
                 <label style="text-align:right">Branch:</label><br />
                 <InputSelect class="form-control" @bind-Value="order.Branches">
+                    <option value=""></option>
                     @foreach (Branch branch in order.Branches)
                     {
                         <option value="@branch.Name">@branch.Name</option>
@@ -115,7 +116,7 @@
 
     protected void GetInfoFromDB()
     {
-        order.Branches = db.Branches.ToList();
+        order.Branches = db.Branches.OrderBy(o => o.Name).ToList();
         order.Departments = db.Departments.ToList();
         orderItems = db.OrderItems.ToList();
     }

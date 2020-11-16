@@ -21,9 +21,6 @@ namespace CarePartnersPortal
         public string Province { get; set; }
         public string Country { get; set; }
         public string PostalCode { get; set; }
-        public List<Branch> Branches { get; set; }
-        public List<Department> Departments { get; set; }
-        public List<OrderItem> Cart { get; set; }
         public string AdditionalInformaiton { get; set; }
         public bool Approved { get; set; } = false;
         public DateTime ApprovalDateTime { get; set; }

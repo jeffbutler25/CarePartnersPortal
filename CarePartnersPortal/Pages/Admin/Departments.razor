@@ -1,9 +1,9 @@
 ﻿@page "/Admin/Departments"
 @page "/Admin/Departments/{task}/{ID}"
 @layout MainLayoutAdmin
-@using CarePartnersPortal.Data
 @inject DBContext db
 @inject NavigationManager nav
+@attribute [Authorize(Policy = "Admin")]
 <h3>Departments</h3>
 <EditForm Model="@department">
     <table class="table">
@@ -32,7 +32,8 @@
                     </tr>
                 }
             }
-            @if (Task != "edit") {
+            @if (Task != "edit")
+            {
                 <tr>
                     <td><InputText class="form-control" @bind-Value="department.Name" /></td>
                     <td><InputText class="form-control" @bind-Value="department.Approvers" /></td>

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarePartnersPortal.Migrations
 {
     [DbContext(typeof(DBContextProcura))]
-    [Migration("20201105202241_initial")]
-    partial class initial
+    [Migration("20201116141804_prorcuraInitial")]
+    partial class prorcuraInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,8 +40,8 @@ namespace CarePartnersPortal.Migrations
                     b.Property<string>("File_Path")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("File_Size")
-                        .HasColumnType("int");
+                    b.Property<long>("File_Size")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("File_Type")
                         .HasColumnType("nvarchar(max)");
@@ -52,8 +52,8 @@ namespace CarePartnersPortal.Migrations
                     b.Property<byte[]>("ZIP_File_Image")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("ZIP_File_Size")
-                        .HasColumnType("int");
+                    b.Property<long>("ZIP_File_Size")
+                        .HasColumnType("bigint");
 
                     b.Property<decimal>("client_number")
                         .HasColumnType("decimal(20,0)");

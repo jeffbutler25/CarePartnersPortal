@@ -1,4 +1,5 @@
 ﻿@page "/activeusers"
+@attribute [Authorize(Policy = "Admin")]
 <h3>Active Users</h3>
 
 
@@ -12,7 +13,7 @@
 </select>
 
 <input type="button" text="Search" class="btn btn-lg" @onclick="GetUers" />
- 
+
 
 <table class="table table-striped">
     <thead class="thead-dark">

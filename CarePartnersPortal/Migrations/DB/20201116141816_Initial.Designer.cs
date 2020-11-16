@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarePartnersPortal.Migrations.DB
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20201106183406_initial")]
-    partial class initial
+    [Migration("20201116141816_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -299,7 +299,7 @@ namespace CarePartnersPortal.Migrations.DB
                     b.ToTable("Regions");
                 });
 
-            modelBuilder.Entity("CarePartnersPortal.TempPW", b =>
+            modelBuilder.Entity("CarePartnersPortal.TempInfo", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -309,8 +309,8 @@ namespace CarePartnersPortal.Migrations.DB
                     b.Property<string>("Access")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateTimeCreated")
                         .HasColumnType("datetime2");
@@ -321,9 +321,15 @@ namespace CarePartnersPortal.Migrations.DB
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("System")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ID");
 
-                    b.ToTable("TempPWs");
+                    b.ToTable("TempInfos");
                 });
 
             modelBuilder.Entity("CarePartnersPortal.Branch", b =>

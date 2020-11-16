@@ -68,15 +68,16 @@ namespace CarePartnersPortal
 
         public static SearchResult FindAccountByEmail(string email)
         {
-            string filter = string.Format("(proxyaddresses=smtp:{0})", email);
+            string filter = string.Format("(proxyaddresses=*smtp:{0}*)", email);
 
             using (DirectoryEntry gc = new DirectoryEntry("LDAP://DC=carepartners,DC=local"))
             { 
                 using (DirectorySearcher searcher = new DirectorySearcher(gc, filter, new string[] { "proxyAddresses", "userprincipalname", "displayName" }))
                 {
                     searcher.ReferralChasing = ReferralChasingOption.All;
-                    SearchResult result = searcher.FindOne();
-                    string email2 = result.Properties[1].Values.ToString();
+                    SearchResult result = searcher.FindOne();                    
+                    string name = result.Properties["displayName"][0].ToString();
+                    string upn = result.Properties["userprincipalname"][0].ToString();
                     return result;
                 }
             }
