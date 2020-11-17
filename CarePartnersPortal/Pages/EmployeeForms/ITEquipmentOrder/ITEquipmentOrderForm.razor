@@ -1,7 +1,5 @@
 ﻿@page "/ITEquipmentOrders"
-
 <h3>IT Equipment Order Form</h3>
-@using CarePartnersPortal.Data
 @inject NavigationManager NavigationManager
 @inject DBContext db
 <br />
@@ -18,9 +16,9 @@
             <!-- #region Branch Type -->
             <div class="form-group">
                 <label style="text-align:right">Branch:</label><br />
-                <InputSelect class="form-control" @bind-Value="order.Branches">
+                <InputSelect class="form-control" @bind-Value="branches">
                     <option value=""></option>
-                    @foreach (Branch branch in order.Branches)
+                    @foreach (Branch branch in branches)
                     {
                         <option value="@branch.Name">@branch.Name</option>
                     }
@@ -93,6 +91,8 @@
 
 @code {
     private ITEquipmentOrder order = new ITEquipmentOrder();
+    private List<Branch> branches = new List<Branch>();
+    private List<Department> departments = new List<Department>();
     private GlobalForm form = new GlobalForm();
     private Email email = new Email();
     private List<OrderItem> orderItems;
@@ -116,8 +116,8 @@
 
     protected void GetInfoFromDB()
     {
-        order.Branches = db.Branches.OrderBy(o => o.Name).ToList();
-        order.Departments = db.Departments.ToList();
+        branches = db.Branches.OrderBy(o => o.Name).ToList();
+        departments = db.Departments.ToList();
         orderItems = db.OrderItems.ToList();
     }
 }

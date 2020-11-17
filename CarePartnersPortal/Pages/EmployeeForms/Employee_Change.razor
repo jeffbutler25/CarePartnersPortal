@@ -56,12 +56,7 @@
             {
                 <div class="form-group">
                     <label style="text-align:right">New Title:</label><br />
-                    <InputSelect class="form-control" @bind-Value="change.JobTitle">
-                        @foreach (JobTitle title in db.JobTitles)
-                            {
-                            <option value="@title.Name">@title.Name</option>
-                            }                        
-                    </InputSelect>
+                    <InputText class="form-control" @bind-Value="change.JobTitle"></InputText>
                 </div>
             }
             <!-- #endregion -->

@@ -15,7 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace CarePartnersPortal
 {
@@ -67,7 +68,12 @@ namespace CarePartnersPortal
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "images")),
+                RequestPath = "/images"
+            });
             app.UseRouting();
 
             app.UseAuthentication();

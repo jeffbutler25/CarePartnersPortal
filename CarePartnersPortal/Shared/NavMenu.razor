@@ -1,25 +1,28 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">CarePartnersPortal</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
-
+﻿
+<img src="images/logo.png" style="padding-left:5px" />
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+
     <ul class="nav flex-column">
+
+
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+            <NavLink class="nav-link" href="employee/hire">
+                <span class="oi oi-person" aria-hidden="true"></span> Employee Hire
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+            <NavLink class="nav-link" href="employee/change">
+                <span class="oi oi-person" aria-hidden="true"></span> Employee Change
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            <NavLink class="nav-link" href="employee/exit">
+                <span class="oi oi-person" aria-hidden="true"></span> Employee Exit
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="itequipmentorders">
+                <span class="oi oi-cart" aria-hidden="true"></span> IT Equipment Orders
             </NavLink>
         </li>
     </ul>

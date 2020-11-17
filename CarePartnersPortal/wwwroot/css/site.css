@@ -24,6 +24,7 @@ app {
     height: 3.5rem;
     display: flex;
     align-items: center;
+    z-index: 100;
 }
 
 .main {
@@ -47,7 +48,7 @@ app {
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-image: linear-gradient(180deg, #a6a6a6 10%, #b0151e 70%);
 }
 
     .sidebar .top-row {

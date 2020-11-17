@@ -61,7 +61,6 @@
     protected void GetInfoFromDB()
     {
         departments = db.Departments.OrderBy(department => department.Name).ToList();
-
     }
 
     protected void AddDepartment(Department department)
@@ -79,7 +78,6 @@
     }
     protected void EditDepartment(Department department)
     {
-
         nav.NavigateTo($"/admin/departments/edit/{department.ID}", true);
     }
     protected void UpdateDepartment(Department department)

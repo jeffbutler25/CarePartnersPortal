@@ -1,5 +1,5 @@
 ﻿@page "/outagenotification"
-@page "/outagenotification/Edit/{ID}"
+@page "/outagenotification/{Task}/{ID}"
 @attribute [Authorize(Policy = "Admin")]
 <h3>IT Outage</h3>
 @inject DBContext db
@@ -7,17 +7,8 @@
     <DataAnnotationsValidator />
     <br />
     <h4 style="text-align:center">Select Impacted Systems</h4>
-    <div class="container" style="outline: double">
+    <div class="" style="">
         <div class="row">
-            <div class="col" style="outline: double">
-                <p style="text-align:center"><b>Systems List</b></p>
-                @foreach (ITSystem system in itSystems)
-                {
-                    <button class="btn btn-outline-secondary" style="margin:5px" @onclick="() => AddImpactedSystem(system)">  @system.Name  </button>
-                }
-            </div>
-            <div class="col">
-            </div>
             <div class="col" style="outline: double">
                 <p style="text-align:center"><b>Impacted Systems List</b></p>
                 @foreach (ITSystem system in itSystemsImpacted)
@@ -25,115 +16,153 @@
                     <button class="btn btn-danger" style="margin:5px" @onclick="() => RemoveImpactedSystem(system)">@system.Name</button>
                 }
             </div>
+            <div class="col-1">
+            </div>
+            <div class="col" style="outline: double">
+                <p style="text-align:center"><b>Systems List</b></p>
+                @foreach (ITSystem system in itSystems)
+                {
+                    <button class="btn btn-outline-secondary" style="margin:5px" @onclick="() => AddImpactedSystem(system)">  @system.Name  </button>
+                }
+            </div>
         </div>
     </div>
     <br />
 
     <h4 style="text-align:center">Select Impacted Users</h4>
-    <div class="container" style="outline: double">
+    <div class="" style="">
         <div class="row">
             <div class="col" style="outline: double">
-                <p style="text-align:center"><b>User Groups</b></p>
-                @foreach (string group in userGroups)
+                <p style="text-align:center"><b>Impacted Users</b></p>
+                @foreach (Region region in impactedRegions)
                 {
-                    <button class="btn btn-outline-secondary" style="margin:5px" @onclick="() => AddImpactedUsers(group)">@group</button>
+                    <button class="btn btn-danger" style="margin:5px" @onclick="() => RemoveImpactedUsers(region)">@region.Name</button>
                 }
             </div>
-            <div class="col">
+            <div class="col-1">
             </div>
             <div class="col" style="outline: double">
-                <p style="text-align:center"><b>Impacted Users</b></p>
-                @foreach (string group in impactedUserGroups)
+                <p style="text-align:center"><b>User Groups</b></p>
+                @foreach (Region region in regions)
                 {
-                    <button class="btn btn-outline-danger" style="margin:5px" @onclick="() => RemoveImpactedUsers(group)">@group</button>
+                    <button class="btn btn-outline-secondary" style="margin:5px" @onclick="() => AddImpactedUsers(region)">@region.Name</button>
                 }
             </div>
+
         </div>
     </div>
     <br />
+    <div class="row">
+        <div class="col-md-5">
+            <div class="form-group">
+                <label style="text-align:right">Outage Type:</label><br />
+                <InputSelect class="form-control" @bind-Value="outage.IncidentType">
+                    <option value="Scheduled Maintenance">Scheduled Maintenance</option>,
+                    <option value="Outage">Outage</option>
+                </InputSelect>
+            </div>
+            <div class=" form-group">
+            <label style="text-align:right">Notification Type:</label><br />
+            <InputSelect class="form-control" @bind-Value="outage.NotificaitonType">
+                <option value="Office Staff Only">Office Staff Only</option>,
+                <option value="FrontLine and Office Staff">FrontLine and Office Staff</option>
+            </InputSelect>
+            </div>
+            <div class="form-group">
+                <label style="text-align:right">Start:</label><br />
+                <InputText class="form-control" @bind-Value="outage.OutageStart" />
+            </div>
 
-    <div class="form-group">
-        <label style="text-align:right">Outage Type:</label><br />
-        <InputSelect class="form-control" @bind-Value="outage.IncidentType">
-            <option value="Scheduled Maintenance">Scheduled Maintenance</option>,
-            <option value="Outage">Outage</option>
-        </InputSelect>
+            <div class="form-group">
+                <label style="text-align:right">End:</label><br />
+                <InputText class="form-control" @bind-Value="outage.OutageEnd" />
+            </div>
+
+            <div class="form-group">
+                <label style="text-align:right">Details:</label><br />
+                <InputTextArea class="form-control" @bind-Value="outage.Details" />
+            </div>
+
+        </div>
     </div>
-
-    <div class="form-group">
-        <label style="text-align:right">Start:</label><br />
-        <InputText class="form-control" @bind-Value="outage.OutageStart" />
-    </div>
-
-    <div class="form-group">
-        <label style="text-align:right">End:</label><br />
-        <InputText class="form-control" @bind-Value="outage.OutageEnd" />
-    </div>
-
-    <div class="form-group">
-        <label style="text-align:right">Details:</label><br />
-        <InputTextArea class="form-control" @bind-Value="outage.Details" />
-    </div>
-
-
 </EditForm>
 
 @code {
     [Parameter]
     public string ID { get; set; }
+    [Parameter]
+    public string Task { get; set; }
 
     ITOutage outage = new ITOutage();
     Email notification = new Email();
     List<ITSystem> itSystems = new List<ITSystem>();
     List<ITSystem> itSystemsImpacted = new List<ITSystem>();
-    List<string> userGroups = new List<string>();
-    List<string> impactedUserGroups = new List<string>();
+    List<Region> regions = new List<Region>();
+    List<Region> impactedRegions = new List<Region>();
 
     private bool test = false;
     protected override void OnInitialized()
     {
-        itSystems.Add(new ITSystem() { Name = "CellTrak" });
-        itSystems.Add(new ITSystem() { Name = "Procura" });
-        itSystems.Add(new ITSystem() { Name = "Cims" });
-        itSystems.Add(new ITSystem() { Name = "Email" });
-        itSystems.Add(new ITSystem() { Name = "Citrix" });
-        itSystems.Add(new ITSystem() { Name = "Sage" });
-        itSystems.Add(new ITSystem() { Name = "Phones" });
 
-        userGroups.Add("South West");
-        userGroups.Add("Waterloo Wellington");
-        userGroups.Add("HNHB");
-        userGroups.Add("Mississauga Halton");
-        userGroups.Add("Central East");
-        userGroups.Add("Central West");
-        userGroups.Add("NE NW");
-        userGroups.Add("Corporate");
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            GetInfoFromDB();
+            if (Task == null)
+            {
+                outage = db.ITOutages.Single(x => x.ID == Int32.Parse(ID));
 
-        //for (int i = 0; i < 26; i++)
-        //{
-        //    itSystems.Add(new ITSystem() { Name = i.ToString() + " System" });
-        //}
-        //for (int i = 0; i < 16; i++)
-        //{
-        //    userGroups.Add(i.ToString() + " User Group");
-        //}
-        GetInfoFromDB();
+                
+            }
+            if (Task == "Edit")
+            {
+                if(ID != null)
+                {
+
+                }
+            }
+            StateHasChanged();
+        }
     }
 
     protected void HandleValidSubmit()
     {
-        SendNotificaiton();
+        AddOutage();
     }
 
-    protected void SendNotificaiton()
+    protected void AddOutage()
     {
-
+        foreach(Region region in impactedRegions)
+        {
+            if (outage.NotificaitonType == "Office Staff Only" )
+            {
+                outage.ImpactedUsers = region.OfficeStaffDL + ",";
+            }
+            if (outage.NotificaitonType == "FrontLine and Office Staff")
+            {
+                outage.ImpactedUsers += region.OfficeStaffDL + ",";
+                outage.ImpactedUsers += region.FrontlineStaffDL + ",";
+            }
+        }
+        outage.ImpactedUsers = outage.ImpactedUsers.TrimEnd(',');
+        foreach (ITSystem system in itSystemsImpacted)
+        {
+            outage.ImpactedSystems += system.Name + ",";
+        }
+        outage.ImpactedSystems = outage.ImpactedSystems.TrimEnd(',');
+        outage.Status = "Created";
+        db.ITOutages.Add(outage);
+        db.SaveChanges();
     }
+
     protected void GetInfoFromDB()
     {
-        //itSystems = db.ITSystems.ToList();
-        //userGroups =
+        itSystems = db.ITSystems.OrderBy(o => o.Name).ToList();
+        regions = db.Regions.OrderBy(o => o.Name).ToList();
     }
+
     protected void AddImpactedSystem(ITSystem system)
     {
         itSystems.Remove(system);
@@ -146,17 +175,16 @@
         itSystemsImpacted.Remove(system);
     }
 
-    protected void AddImpactedUsers(string group)
+    protected void AddImpactedUsers(Region group)
     {
-        userGroups.Remove(group);
-        impactedUserGroups.Add(group);
+        regions.Remove(group);
+        impactedRegions.Add(group);
     }
 
-    protected void RemoveImpactedUsers(string group)
+    protected void RemoveImpactedUsers(Region group)
     {
-        userGroups.Add(group);
-        impactedUserGroups.Remove(group);
+        regions.Add(group);
+        impactedRegions.Remove(group);
     }
-
 }
 

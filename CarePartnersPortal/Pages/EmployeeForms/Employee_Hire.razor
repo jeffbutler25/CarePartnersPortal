@@ -2,12 +2,10 @@
 @using CarePartnersPortal.Data
 @inject NavigationManager NavigationManager
 @inject DBContext db
-
-    <EditForm Model="@hire" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <h2 style="padding-bottom:15px">Employee Hire Form</h2>
-
-        <div class="col-md-5">
+<h2>Employee Hire Form</h2>
+<EditForm Model="@hire" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="col-md-5">
         <div class="form-group">
             <label style="text-align:right">Hire Type:</label><br />
             <InputSelect class="form-control" @bind-Value="hire.HireType">
@@ -19,7 +17,7 @@
         </div>
         <div class="form-group">
             <label style="text-align:right">Start Date:</label><br />
-            <InputDate class="form-control" @bind-Value="hire.StartDate" />            
+            <InputDate class="form-control" @bind-Value="hire.StartDate" />
         </div>
         <div class="form-group">
             <label style="text-align:right">First Name:</label><br />
@@ -53,30 +51,25 @@
         </div>
         <div class="form-group">
             <label style="text-align:right">Job Title:</label><br />
-            <InputSelect class="form-control" @bind-Value="hire.JobTitle">
-                @foreach (JobTitle jobTitle in db.JobTitles)
-                {
-                    <option value="@jobTitle.Name">@jobTitle.Name</option>
-                }
-            </InputSelect>
+            <InputText class="form-control" @bind-Value="hire.JobTitle"></InputText>
         </div>
         <div class="form-group">
             <label style="text-align:right">Additional Requirements:</label><br />
             <InputTextArea class="form-control" @bind-Value="hire.AdditonalRequirements" />
         </div>
-</div>
+    </div>
 
 
-        <button class="btn btn-lg btn-primary" type="submit">Submit</button><br /><br />
-        <ValidationSummary />
-    </EditForm>
+    <button class="btn btn-lg btn-primary" type="submit">Submit</button><br /><br />
+    <ValidationSummary />
+</EditForm>
 
 @code {
     private EmployeeHire hire = new EmployeeHire();
     private GlobalForm form = new GlobalForm();
     private Email email = new Email();
 
-    
+
 
     protected override void OnAfterRender(bool firstRender)
     {

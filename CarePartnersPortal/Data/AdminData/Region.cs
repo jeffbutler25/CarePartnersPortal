@@ -12,5 +12,7 @@ namespace CarePartnersPortal
         public int ID { get; set; }
         public string Name { get; set; }
         public string Approvers { get; set; }
+        public string FrontlineStaffDL { get; set; }
+        public string OfficeStaffDL { get; set; }
     }
 }

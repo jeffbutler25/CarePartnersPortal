@@ -9,10 +9,12 @@ namespace CarePartnersPortal
     public class ITOutage
     {
         [Key]
+        public int ID { get; set; }
         public string IncidentType { get; set; }
         public string CrationDate { get; set; } = DateTime.Now.ToString();
         public string OutageStart { get; set; } = DateTime.Now.ToString();
         public string OutageEnd { get; set; }
+        public string NotificaitonType { get; set; }
         public string ImpactedSystems { get; set; }
         public string ImpactedUsers { get; set; }
         public string Details { get; set; }

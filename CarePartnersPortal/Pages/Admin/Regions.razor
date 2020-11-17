@@ -11,6 +11,8 @@
             <tr style="text-align:center">
                 <th>Region</th>
                 <th>Approvers</th>
+                <th>Office Staff DL</th>
+                <th>Frontline Staff DL</th>
                 <th>Action</th>
             </tr>
             @if (region != null)
@@ -22,6 +24,8 @@
                         <tr>
                             <td><InputText class="form-control" @bind-Value="region.Name" /></td>
                             <td><InputText class="form-control" @bind-Value="region.Approvers" /></td>
+                            <td><InputText class="form-control" @bind-Value="region.OfficeStaffDL" /></td>
+                            <td><InputText class="form-control" @bind-Value="region.FrontlineStaffDL" /></td>
                             <td><button class="btn btn-primary btn-sm" @onclick="e => UpdateRegion(region)">Update</button> <button class="btn btn-primary btn-sm" @onclick="@(e => DeleteRegion(region))">Delete</button></td>
                         </tr>
                     }
@@ -30,6 +34,8 @@
                         <tr>
                             <td>@region.Name</td>
                             <td>@region.Approvers</td>
+                            <td>@region.OfficeStaffDL</td>
+                            <td>@region.FrontlineStaffDL</td>
                             <td><button class="btn btn-primary btn-sm" @onclick="e => EditRegion(region)">Edit</button></td>
                         </tr>
                     }
@@ -40,6 +46,8 @@
                 <tr>
                     <td><InputText class="form-control" @bind-Value="region.Name" /></td>
                     <td><InputText class="form-control" @bind-Value="region.Approvers" /></td>
+                    <td><InputText class="form-control" @bind-Value="region.OfficeStaffDL" /></td>
+                    <td><InputText class="form-control" @bind-Value="region.FrontlineStaffDL" /></td>
                     <td><button class="btn btn-primary btn-sm" @onclick="e => AddRegion(region)">Add</button></td>
                 </tr>
             }

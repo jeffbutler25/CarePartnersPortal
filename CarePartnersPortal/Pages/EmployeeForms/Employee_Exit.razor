@@ -62,12 +62,7 @@
             <!-- #region Job Title -->
             <div class="form-group">
                 <label style="text-align:right">Job Title:</label><br />
-                <InputSelect class="form-control" @bind-Value="exit.JobTitle">
-                    @foreach (JobTitle jobTitle in db.JobTitles)
-                    {
-                        <option value="@jobTitle.Name">@jobTitle.Name</option>
-                    }
-                </InputSelect>
+                <InputText class="form-control" @bind-Value="exit.JobTitle"></InputText>
             </div>
             <!-- #endregion -->
             <!-- #region Hardware Returned -->

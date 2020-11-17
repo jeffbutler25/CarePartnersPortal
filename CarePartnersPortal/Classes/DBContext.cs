@@ -19,7 +19,6 @@ namespace CarePartnersPortal
         public DbSet<ITSystem> ITSystems { get; set; }
         public DbSet<EmployeeHire> EmployeeHires { get; set; }
         public DbSet<HireType> HireTypes { get; set; }
-        public DbSet<JobTitle> JobTitles { get; set; }
         public DbSet<ITOutage> ITOutages { get; set; }
     }
 }

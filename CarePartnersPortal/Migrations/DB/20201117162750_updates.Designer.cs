@@ -4,14 +4,16 @@ using CarePartnersPortal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarePartnersPortal.Migrations.DB
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20201117162750_updates")]
+    partial class updates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,13 +279,10 @@ namespace CarePartnersPortal.Migrations.DB
                     b.Property<string>("Approvers")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FrontlineStaffDL")
+                    b.Property<string>("DistributionGroup")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OfficeStaffDL")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");

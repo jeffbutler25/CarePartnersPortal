@@ -1,0 +1,99 @@
+﻿@page "/Admin/Systems"
+@page "/Admin/Systems/{task}/{ID}"
+@layout MainLayoutAdmin
+@inject DBContext db
+@inject NavigationManager nav
+
+@attribute [Authorize(Policy = "Admin")]
+
+<h3>Branches</h3>
+
+<EditForm Model="@system">
+    <table class="table">
+        <thread>
+            <tr style="text-align:center">
+                <th>Name</th>
+                <th>Internal Contacts</th>
+                <th>Extneral Contacts</th>
+                <th>Notification DL</th>
+            </tr>
+            @foreach (ITSystem system in sysetms)
+            {
+                if (Task == "edit" && system.ID == Int32.Parse(ID))
+                {
+                    <tr>
+                        <td><InputText class="form-control" @bind-Value="system.Name" /></td>                        
+                        <td><InputText class="form-control" @bind-Value="system.ContactsInternal" /></td>
+                        <td><InputText class="form-control" @bind-Value="system.ContactsExternal" /></td>
+                        <td><InputText class="form-control" @bind-Value="system.NotificationGroup" /></td>
+                        <td><button class="btn btn-primary btn-sm" @onclick="e => UpdateSystem(system)">Update</button> <button class="btn btn-primary btn-sm" @onclick="@(e => DeleteSystem(system))">Delete</button></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@system.Name</td>
+                        <td>@system.ContactsInternal</td>
+                        <td>@system.ContactsExternal</td>
+                        <td>@system.NotificationGroup</td>
+                        <td><button class="btn btn-primary btn-sm" @onclick="e => EditSystem(system)">Edit</button></td>
+                    </tr>
+                }
+            }
+            @if (Task != "edit")
+            {
+                <tr>
+                    <td><InputText class="form-control" @bind-Value="system.Name" /></td>                        
+                        <td><InputText class="form-control" @bind-Value="system.ContactsInternal" /></td>
+                        <td><InputText class="form-control" @bind-Value="system.ContactsExternal" /></td>
+                        <td><InputText class="form-control" @bind-Value="system.NotificationGroup" /></td>
+                    <td><button class="btn btn-primary btn-sm" @onclick="e => AddSystem(system)">Add</button></td>
+                </tr>
+            }
+        </thread>
+    </table>
+</EditForm>
+
+@code {
+    List<ITSystem> sysetms = new List<ITSystem>();
+    private ITSystem system = new ITSystem();
+    [Parameter]
+    public string Task { get; set; }
+    [Parameter]
+    public string ID { get; set; }
+
+    protected override void OnInitialized()
+    {
+        GetInfoFromDB();
+    }
+
+    protected void GetInfoFromDB()
+    {
+        sysetms = db.ITSystems.OrderBy(o => o.Name).ToList();       
+    }
+
+    protected void AddSystem(ITSystem system)
+    {
+        db.ITSystems.Add(system);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/systems", true);
+    }
+
+    protected void DeleteSystem(ITSystem system)
+    {
+        db.ITSystems.Remove(system);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/systems", true);
+    }
+    protected void EditSystem(ITSystem system)
+    {
+
+        nav.NavigateTo($"/admin/systems/edit/{system.ID}", true);
+    }
+    protected void UpdateSystem(ITSystem system)
+    {
+        db.Update(system);
+        db.SaveChanges();
+        nav.NavigateTo("/admin/systems", true);
+    }
+}
